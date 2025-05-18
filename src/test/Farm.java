@@ -1,6 +1,4 @@
-package src.test;
-import java.time.*; //buat ngisi aja, harus bikin sendiri
-
+package test;
 public class Farm {
     private String name;
     private Time time;

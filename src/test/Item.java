@@ -3,9 +3,9 @@ package test;
 abstract class Item {
     private String itemName;
 
-    public name(String itemname){
+    public Item(String itemname){
         this.itemName = itemname;                                  
     }
     public String getItem;
-    public Gold getPrice;
+    public int getPrice;
 }
