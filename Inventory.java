@@ -1,35 +1,56 @@
-import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 public class Inventory {
-    private ArrayList<String> items;
+    private Map<Item, Integer> inventory;
 
     public Inventory() {
-        items = new ArrayList<>();
-
-        items.add("Parnsnips Seeds x15");
-        items.add("Hoe");
-        items.add("Watering Can");
-        items.add("Pickaxe");
-        items.add("Fishing Rod");   
+        inventory = new LinkedHashMap<>();  
+        
+        // Menambahkan beberapa item awal ke inventory
+        // inventory.put(new Seeds("Parsnips Seeds", 20, 10), 15);
+        inventory.put(new Equipment("Hoe"), 1);
+        inventory.put(new Equipment("Watering Can"), 1);
+        inventory.put(new Equipment("Pickaxe"), 1);
+        inventory.put(new Equipment("Fishing Rod"), 1);
     }
 
-    public void addItem(String item) {
-        items.add(item);
-        System.out.println(item + " ditambah ke inventory!");
-    }
-
-    public void showInventory() {
-        System.out.println("Your Inventory:");
-        for (String item : items) {
-            System.out.println("- " + item);
+    public void addItem(Item item, int quantity) {
+        if (inventory.containsKey(item)) {
+            inventory.put(item, inventory.get(item) + quantity);
+        }
+        else {
+            inventory.put(item, quantity);
         }
     }
 
-    public static void main(String[] args) {
-        Inventory playerInventory = new Inventory();  
-        playerInventory.showInventory();  
+    public void removeItem(Item item, int quantity) {
+        if (inventory.containsKey(item)) {
+            int currentQuantity = inventory.get(item);
+            if (currentQuantity > quantity) {
+                inventory.put(item, currentQuantity - quantity);
+            }
+            else if (currentQuantity == quantity) {
+                inventory.remove(item);
+            }
+            else {
+                System.out.println("Jumlah item yang ingin dihapus melebihi jumlah yang ada di inventory.");
+            }
+        }
+        else {
+            System.out.println("Item tidak ditemukan di inventory.");
+        }
+    }
 
-        playerInventory.addItem("Axe");
-        playerInventory.showInventory(); 
+    public int getItemQuantity(Item item) {
+        return inventory.getOrDefault(item, 0);
+    }
+
+    public void displayInventory() {
+        System.out.println("Inventory:");
+        for (Map.Entry<Item, Integer> entry : inventory.entrySet()) {
+            Item item = entry.getKey();
+            System.out.println(item.getName() + " x" + getItemQuantity(item));
+        }
     }
 }
