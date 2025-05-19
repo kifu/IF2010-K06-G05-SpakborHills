@@ -6,6 +6,14 @@ abstract class Item {
     public Item(String itemname){
         this.itemName = itemname;                                  
     }
+    /**
+     * memberikan nilai item dari seed
+     * @return String
+     */
     public String getItem;
+    /**
+     * memberikan nilai Price dari seed
+     * @return Gold
+     */
     public int getPrice;
 }

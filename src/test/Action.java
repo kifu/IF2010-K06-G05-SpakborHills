@@ -17,7 +17,7 @@ public interface Action{
      * return time cost of action
      * @return Time
      */
-   public void getTimeCost();
+   public Time getTimeCost();
 
    /**
      * check if player can execute action

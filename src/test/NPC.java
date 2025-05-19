@@ -59,7 +59,7 @@ public class NPC{
         this.giftingcouint = newgiftcount;
     }
 
-    public voidsetvisitorcount(){
+    public void setvisitorcount(){
         return this.visitingcount;
     }
 } 
