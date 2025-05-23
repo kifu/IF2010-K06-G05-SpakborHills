@@ -54,7 +54,7 @@ public class Time {
 
     @Override
     public String toString() {
-        return String.format("Day %d, %02d:%02d", hours, minutes, day);
+        return String.format("Day %d, %02d:%02d", day, hours, minutes);
     }
 
     public String getPhase() {
