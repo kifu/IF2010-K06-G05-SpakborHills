@@ -14,12 +14,15 @@ public class House {
     // Map dan posisi player
     private char[][] map;
     private int playerX, playerY;
+    
 
     // Daftar furnitur (untuk extensi/fungsi interaksi)
     private List<Furniture> furnitures;
+    // WorldState
+    private WorldState worldState;
 
     // Konstruktor
-    public House() {
+    public House(WorldState worldState) {
         map = new char[MAP_SIZE][MAP_SIZE];
         furnitures = new ArrayList<>();
         initializeMap();
@@ -27,6 +30,7 @@ public class House {
         // Player dimulai di dekat pintu (asumsi bawah tengah)
         playerX = MAP_SIZE / 2;
         playerY = MAP_SIZE - 2;
+        this.worldState = worldState;
     }
 
     // Inisialisasi seluruh ruangan kosong
@@ -130,7 +134,7 @@ public class House {
                 System.out.println("Interaksi dengan " + f.name + ": " + f.description);
                 if (f.id.equals("tv")) {
                     // Aksi menonton TV
-                    Watching watching = new Watching(time);
+                    Watching watching = new Watching(time, worldState);
                     watching.execute(player);
                 } else if (f.id.equals("stove")) {
                     System.out.println("Kamu bisa memasak makanan di sini (butuh bahan dan fuel).");
@@ -163,7 +167,8 @@ public class House {
     }
     // Main untuk testing
     public static void main(String[] args) {
-        House house = new House();
+        WorldState worldState = new WorldState();
+        House house = new House(worldState);
         Scanner scanner = new Scanner(System.in);
 
         System.out.println("=== SELAMAT DATANG DI RUMAH ASEP SPAKBOR ===");
