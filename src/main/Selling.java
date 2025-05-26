@@ -1,65 +1,76 @@
-package main;
-
 import java.util.Scanner;
 
 public class Selling implements Action {
+    private ShippingBin shippingBin;
+    private Time time;
+
+    public Selling(ShippingBin shippingBin, Time time) {
+        this.shippingBin = shippingBin;
+        this.time = time;
+    }
+
+    /**
+     * Proses menaruh item ke shipping bin untuk dijual.
+     * - Player memilih item dari inventory.
+     * - Item langsung dihapus dari inventory dan masuk ke shipping bin.
+     * - Waktu berhenti selama memilih, waktu berjalan 15 menit setelah selesai selling.
+     */
     @Override
     public void execute(Player player) {
-        Scanner scanner = new Scanner(System.in);
         Inventory inventory = player.getInventory();
-        ShippingBin shippingBin = player.getShippingBin();
+        Scanner scanner = new Scanner(System.in);
 
-        // Tampilkan inventory player
         inventory.displayInventory();
 
-        System.out.print("Masukkan nama item yang ingin dijual: ");
+        System.out.println("Masukkan nama item yang ingin dijual (atau ketik 'batal'):");
         String itemName = scanner.nextLine().trim();
 
-        // Cari item di inventory berdasarkan nama (case-insensitive)
-        Item itemToSell = null;
-        for (Item item : inventory.getAllItems()) {
+        if (itemName.equalsIgnoreCase("batal")) {
+            System.out.println("Penjualan dibatalkan.");
+            return;
+        }
+
+        // Cari item di inventory berdasarkan nama
+        Item selected = null;
+        for (Item item : inventory.inventory.keySet()) {
             if (item.getName().equalsIgnoreCase(itemName)) {
-                itemToSell = item;
+                selected = item;
                 break;
             }
         }
-        if (itemToSell == null) {
+
+        if (selected == null) {
             System.out.println("Item tidak ditemukan di inventory.");
             return;
         }
 
-        System.out.print("Masukkan jumlah yang ingin dijual: ");
-        int qty;
-        try {
-            qty = Integer.parseInt(scanner.nextLine());
-        } catch (NumberFormatException e) {
-            System.out.println("Jumlah tidak valid.");
-            return;
+        int quantity = 0;
+        while (true) {
+            System.out.print("Jumlah yang ingin dijual (tersedia: " + inventory.getItemQuantity(selected) + "): ");
+            String qtyInput = scanner.nextLine().trim();
+            try {
+                quantity = Integer.parseInt(qtyInput);
+                if (quantity <= 0) {
+                    System.out.println("Jumlah harus lebih dari 0.");
+                } else if (quantity > inventory.getItemQuantity(selected)) {
+                    System.out.println("Jumlah melebihi stok.");
+                } else {
+                    break;
+                }
+            } catch (NumberFormatException e) {
+                System.out.println("Input tidak valid. Masukkan angka.");
+            }
         }
 
-        if (qty <= 0) {
-            System.out.println("Jumlah harus lebih dari 0.");
-            return;
-        }
+        // Tambahkan ke shipping bin
+        boolean success = shippingBin.addItem(selected, quantity, inventory, null); // waktu tidak berjalan di sini
 
-        // Cek cukup item di inventory
-        if (inventory.getItemQuantity(itemToSell) < qty) {
-            System.out.println("Jumlah item di inventory tidak cukup.");
-            return;
-        }
-
-        // Cek apakah shipping bin full slot unik
-        if (shippingBin.isFull() && !shippingBin.containsItem(itemToSell)) {
-            System.out.println("Shipping Bin sudah penuh slot unik (16 item unik per hari).");
-            return;
-        }
-
-        // Masukkan ke shipping bin
-        boolean success = shippingBin.addItem(itemToSell, qty, inventory);
         if (success) {
-            // Simulasi waktu berjalan 15 menit (implementasi time system sesuai game-mu)
-            System.out.println("Menjual " + qty + "x " + itemToSell.getName() + " ke Shipping Bin. Waktu berlalu 15 menit.");
-            // (Opsional) tambahkan integrasi sistem waktu di sini
+            // Setelah selesai selling, waktu berjalan 15 menit
+            time.advanceMinutes(getTimeCost());
+            System.out.println("Penjualan selesai. Waktu berlalu 15 menit.");
+        } else {
+            System.out.println("Gagal melakukan selling.");
         }
     }
 
@@ -70,12 +81,11 @@ public class Selling implements Action {
 
     @Override
     public int getTimeCost() {
-        return 15; // dalam menit
+        return 15;
     }
 
     @Override
     public boolean canExecute(Player player) {
-        return player.getLocation().equalsIgnoreCase("Farm")
-            || player.getLocation().equalsIgnoreCase("ShippingBin");
+        return !shippingBin.hasSoldToday();
     }
 }

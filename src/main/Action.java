@@ -1,5 +1,3 @@
-package main;
-
 public interface Action {
     void execute(Player player);
     int getEnergyCost();

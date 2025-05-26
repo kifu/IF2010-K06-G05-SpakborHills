@@ -236,8 +236,7 @@ public class FarmMap {
     
     // Cek apakah player bisa visiting (berada di ujung peta)
     private boolean canVisit() {
-        return playerX == 0 || playerX == MAP_SIZE - 1 || 
-               playerY == 0 || playerY == MAP_SIZE - 1;
+        return playerX == MAP_SIZE - 1 && playerY == 0; // ujung kanan atas
     }
     
     // Melakukan interaksi dengan objek atau tile
