@@ -31,19 +31,12 @@ public class Selling implements Action {
         }
 
         // Cari item di inventory berdasarkan nama
-        Item selected = null;
-        for (Item item : inventory.inventory.keySet()) {
-            if (item.getName().equalsIgnoreCase(itemName)) {
-                selected = item;
-                break;
-            }
-        }
+        Item selected = inventory.getItemByName(itemName);
 
         if (selected == null) {
             System.out.println("Item tidak ditemukan di inventory.");
             return;
         }
-
         int quantity = 0;
         while (true) {
             System.out.print("Jumlah yang ingin dijual (tersedia: " + inventory.getItemQuantity(selected) + "): ");
