@@ -60,4 +60,9 @@ public class Time {
     public String getPhase() {
         return isDayTime() ? "Siang" : "Malam";
     }
+    public void skipTo(int hour, int minute) {
+        this.hours = hour;
+        this.minutes = minute;
+    }
+
 }

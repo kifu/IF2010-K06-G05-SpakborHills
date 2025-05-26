@@ -23,6 +23,17 @@ public class Inventory {
             inventory.put(item, quantity);
         }
     }
+    public boolean hasItem(String itemName) {
+        for (Item item : inventory.keySet()) {
+            if (item.getName().equalsIgnoreCase(itemName)) {
+                return true;
+            }
+        }
+        return false;
+    }
+    public boolean hasItems(Item item, int quantity) {
+        return inventory.getOrDefault(item, 0) >= quantity;
+    }
 
     public void removeItem(Item item, int quantity) {
         if (inventory.containsKey(item)) {
