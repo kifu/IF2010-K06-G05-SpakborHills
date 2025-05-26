@@ -2,7 +2,7 @@ import java.util.*;
 
 public class ShippingBin {
     private static final int MAX_UNIQUE_SLOTS = 16;
-    private Map<Item, Integer> itemsToSell;
+    private final Map<Item, Integer> itemsToSell;
     private boolean hasSoldToday = false;
     private int pendingGold = 0; // Gold dari hasil penjualan yang akan diterima pagi harinya
 
@@ -14,8 +14,9 @@ public class ShippingBin {
      * Menambahkan item ke Shipping Bin dari inventory.
      * Item langsung dihapus dari inventory, tidak dapat dikembalikan lagi.
      * Mengembalikan true jika berhasil, false jika gagal.
+     * Waktu (misal +15 menit) sebaiknya diatur oleh WorldState, bukan ShippingBin!
      */
-    public boolean addItem(Item item, int qty, Inventory playerInventory, Time time) {
+    public boolean addItem(Item item, int qty, Inventory playerInventory) {
         if (hasSoldToday) {
             System.out.println("Kamu hanya bisa menjual sekali per hari.");
             return false;
@@ -31,22 +32,16 @@ public class ShippingBin {
         // Hapus dari inventory, masukkan ke shipping bin
         playerInventory.removeItem(item, qty);
         itemsToSell.put(item, itemsToSell.getOrDefault(item, 0) + qty);
-
-        // Advance waktu 15 menit tiap jualan
-        if (time != null) {
-            time.advanceMinutes(15);
-        }
-        System.out.println("Berhasil menaruh " + item.getName() + " x" + qty +
-            " ke Shipping Bin. (Waktu berlalu 15 menit)");
+        System.out.println("Berhasil menaruh " + item.getName() + " x" + qty + " ke Shipping Bin.");
         return true;
     }
 
     /**
      * Proses penjualan semua item dalam shipping bin.
-     * Dipanggil saat player tidur (malam hari). Gold belum langsung masuk ke player,
-     * melainkan masuk ke pendingGold dan akan diberikan ke player keesokan harinya.
+     * Dipanggil saat player tidur (malam hari) oleh WorldState.
+     * Gold belum langsung masuk ke player, melainkan masuk ke pendingGold dan akan diberikan ke player keesokan harinya.
      */
-    public void sellAll() {
+    public void processEndOfDaySale() {
         int totalGold = 0;
         for (Map.Entry<Item, Integer> entry : itemsToSell.entrySet()) {
             Item item = entry.getKey();
@@ -64,23 +59,13 @@ public class ShippingBin {
     }
 
     /**
-     * Dipanggil pagi harinya, setelah tidur (time.nextDay()),
-     * untuk memasukkan gold ke player dan mereset bin.
+     * Dipanggil pagi harinya oleh WorldState, untuk memasukkan gold ke player dan mereset bin.
      */
-    public int collectGoldNextDay() {
+    public int claimPendingGold() {
         int gold = pendingGold;
         pendingGold = 0;
         hasSoldToday = false;
         return gold;
-    }
-
-    /**
-     * Reset shipping bin di awal hari baru 
-     */
-    public void newDay() {
-        itemsToSell.clear();
-        hasSoldToday = false;
-        pendingGold = 0;
     }
 
     public void displayBin() {

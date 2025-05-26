@@ -2,11 +2,11 @@ import java.util.Scanner;
 
 public class Selling implements Action {
     private ShippingBin shippingBin;
-    private Time time;
+    private WorldState worldState;
 
-    public Selling(ShippingBin shippingBin, Time time) {
+    public Selling(ShippingBin shippingBin, WorldState worldState) {
         this.shippingBin = shippingBin;
-        this.time = time;
+        this.worldState = worldState;
     }
 
     /**
@@ -53,16 +53,17 @@ public class Selling implements Action {
             }
         }
 
-        // Tambahkan ke shipping bin
-        boolean success = shippingBin.addItem(selected, quantity, inventory, null); // waktu tidak berjalan di sini
+        // Tambahkan ke shipping bin (waktu tidak berjalan di sini)
+        boolean success = shippingBin.addItem(selected, quantity, inventory);
 
         if (success) {
-            // Setelah selesai selling, waktu berjalan 15 menit
-            time.advanceMinutes(getTimeCost());
+            // Setelah selesai selling, waktu berjalan 15 menit melalui WorldState
+            worldState.getCurrentTime().advanceMinutes(getTimeCost());
             System.out.println("Penjualan selesai. Waktu berlalu 15 menit.");
         } else {
             System.out.println("Gagal melakukan selling.");
         }
+
         scanner.close();
     }
 

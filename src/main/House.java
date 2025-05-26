@@ -145,7 +145,7 @@ public class House {
                     f.id.equals("bed_3") || ch == BED_KING
                 ) {
                     // Aksi tidur pada semua jenis bed
-                    Sleeping sleeping = new Sleeping(time, this);
+                    Sleeping sleeping = new Sleeping(worldState);
                     sleeping.execute(player);
                 } else {
                     // Furnitur lain: bisa dikembangkan sendiri

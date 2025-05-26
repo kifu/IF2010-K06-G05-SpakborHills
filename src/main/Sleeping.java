@@ -1,8 +1,8 @@
 public class Sleeping {
-    private Time time;
+    private WorldState worldState;
 
-    public Sleeping(Time time, House house) {
-        this.time = time;
+    public Sleeping(WorldState worldState) {
+        this.worldState = worldState;
     }
 
     /**
@@ -14,6 +14,7 @@ public class Sleeping {
      * @param player Player yang tidur
      */
     public void execute(Player player) {
+        Time time = worldState.getCurrentTime();
         if (time.getHours() >= 2) {
             System.out.println("Sudah lewat jam 02:00! Kamu pingsan dan tidur otomatis...");
         } else {
@@ -39,15 +40,10 @@ public class Sleeping {
 
         player.setEnergy(newEnergy);
 
-        // Waktu skip ke pagi
-        time.nextDay();
-        System.out.println("Hari baru dimulai! Energi: " + player.getEnergy());
-    }
+        // Proses hari baru menggunakan WorldState
+        worldState.getCurrentTime().nextDay(); // Advance time to next day (pagi 06:00)
+        worldState.handleNewDay(); // Event hari baru (cuaca, shipping bin, dsb)
 
-    /**
-     * Cek auto sleep jika jam >= 2 pagi (02:00)
-     */
-    public boolean shouldAutoSleep(Time time) {
-        return (time.getHours() >= 2);
+        System.out.println("Hari baru dimulai! Energi: " + player.getEnergy());
     }
 }

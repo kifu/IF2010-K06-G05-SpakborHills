@@ -1,12 +1,12 @@
 public class Visiting {
     private FarmMap farmMap;
     private WorldMap worldMap;
-    private Time time;
+    private WorldState worldState;
 
-    public Visiting(FarmMap farmMap, WorldMap worldMap, Time time) {
+    public Visiting(FarmMap farmMap, WorldMap worldMap, WorldState worldState) {
         this.farmMap = farmMap;
         this.worldMap = worldMap;
-        this.time = time;
+        this.worldState = worldState;
     }
 
     /**
@@ -25,11 +25,11 @@ public class Visiting {
             return;
         }
         // Efek visiting
-        time.advanceMinutes(15);
+        worldState.getCurrentTime().advanceMinutes(15);
         player.setEnergy(player.getEnergy() - 10);
         player.setLocation("WorldMap");
         worldMap.movePlayerToVillage();
         System.out.println("Kamu telah visiting ke World Map (Village). -10 energi, +15 menit.");
-        // Setelah ini bisa worldMap.displayMap() untuk interaksi lanjutan di WorldMap
+        worldMap.displayMap();
     }
 }
