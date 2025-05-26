@@ -235,7 +235,7 @@ public class FarmMap {
     }
     
     // Cek apakah player bisa visiting (berada di ujung peta)
-    private boolean canVisit() {
+    public boolean canVisit() {
         return playerX == MAP_SIZE - 1 && playerY == 0; // ujung kanan atas
     }
     
