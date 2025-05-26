@@ -27,7 +27,6 @@ public class Selling implements Action {
 
         if (itemName.equalsIgnoreCase("batal")) {
             System.out.println("Penjualan dibatalkan.");
-            return;
         }
 
         // Cari item di inventory berdasarkan nama
@@ -35,7 +34,6 @@ public class Selling implements Action {
 
         if (selected == null) {
             System.out.println("Item tidak ditemukan di inventory.");
-            return;
         }
         int quantity = 0;
         while (true) {
