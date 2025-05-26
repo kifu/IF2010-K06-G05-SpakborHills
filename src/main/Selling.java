@@ -65,6 +65,7 @@ public class Selling implements Action {
         } else {
             System.out.println("Gagal melakukan selling.");
         }
+        scanner.close();
     }
 
     @Override
