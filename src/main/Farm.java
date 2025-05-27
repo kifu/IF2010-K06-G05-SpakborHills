@@ -1,4 +1,4 @@
-package test;
+package main;
 public class Farm {
     private String name;
     private Time time;
@@ -8,14 +8,6 @@ public class Farm {
     private Player player;
     private FarmMap farmMap;
 
-
-    public enum Season{
-        Spring,Summer,Fall,Winter
-    }
-    public enum Weather{
-        Sunny, Rainy
-    }
-
     /**
      * Konstrukri kelas farm
      * @param name
@@ -23,11 +15,11 @@ public class Farm {
      */
     public Farm(String name, Player player){
         this.name = name;
-        this.time = LocalTime(0,0);
-        this.season = Spring;
-        this.weather = Rainy;
+        this.time = new Time(0,0,0);
+        this.season = Season.SPRING;
+        this.weather = Weather.RAINY;
         this.player = player;
-        this.farmMap = ;
+        this.farmMap = farmMap;
     }
 
     public Season getSeason(){
