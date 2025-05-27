@@ -3,7 +3,7 @@ package test;
 public class Seeds extends Item{
     // atribut
     private Season SeedsSeason;
-    private Int HarvDur;
+    private int HarvDur;
     private Gold SeedsPrice;
     // konstruktor
     /** Membuat object Seed Baru
@@ -21,9 +21,7 @@ public class Seeds extends Item{
 
     }
     @Override
-    /** Mengembalikan item 
-     * @return Seeds
-    */
+    
     public String getItem(){
         return Seeds;
     }
@@ -42,10 +40,7 @@ public class Seeds extends Item{
         /* memberika season dari seed */
         return this.SeedsSeason;
     }
-    /**
-     * memberikan nilai Price dari seed
-     * @return Gold
-     */
+    
     public Gold getPrice(Seeds seed){
         return this.SeedsPrice;
     }
