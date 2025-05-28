@@ -14,7 +14,7 @@ public class ShippingBin {
      * Menambahkan item ke Shipping Bin dari inventory.
      * Item langsung dihapus dari inventory, tidak dapat dikembalikan lagi.
      * Mengembalikan true jika berhasil, false jika gagal.
-     * Waktu (misal +15 menit) sebaiknya diatur oleh WorldState, bukan ShippingBin!
+     * Waktu (misal +15 menit) 
      */
     public boolean addItem(Item item, int qty, Inventory playerInventory) {
         if (hasSoldToday) {

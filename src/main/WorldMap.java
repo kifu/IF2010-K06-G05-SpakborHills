@@ -79,7 +79,32 @@ public class WorldMap {
         }
     }
 
-    // MAIN LOOP: return false jika ingin kembali ke FarmMap (misal setelah tekan 'V' di FarmMap)
+    // --- Tambahan: Cek player di sekitar area
+    public boolean isPlayerAdjacentToArea(String areaName) {
+        // Normalisasi nama area untuk rumah NPC
+        if (areaName.startsWith("Rumah ")) areaName = areaName.substring(6);
+
+        // Cari lokasi area dari locations Map
+        int[] areaLoc = null;
+        if (locations.containsKey(areaName)) {
+            areaLoc = locations.get(areaName);
+        } else if (locations.containsKey("House_" + areaName)) {
+            areaLoc = locations.get("House_" + areaName);
+        }
+        if (areaLoc == null) return false;
+
+        // Cek 8 arah (termasuk diagonal)
+        int[] dx = {0, 0, -1, 1, -1, -1, 1, 1};
+        int[] dy = {-1, 1, 0, 0, -1, 1, -1, 1};
+        for (int i = 0; i < 8; i++) {
+            int adjX = areaLoc[0] + dx[i];
+            int adjY = areaLoc[1] + dy[i];
+            if (playerX == adjX && playerY == adjY) {
+                return true;
+            }
+        }
+        return false;
+    }
     public boolean enterWorldMap(Scanner scanner) {
         boolean running = true;
         while (running) {
