@@ -8,6 +8,12 @@ public class Tiles{
     public enum Tiletype{
         Soil, Tilled, Planted
     }
+    public Tiles(){
+        this.type = Soil;
+        this.isWatered = True;
+        this.plantedItem = null;
+        this.daysGrown = 0;
+    }
     public Tiles(TileType type, boolean isWatered, Seeds plantedItem, int daysGrown){
         this.type = type;
         this.isWatered = isWatered;
