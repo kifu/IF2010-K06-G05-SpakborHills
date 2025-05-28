@@ -1,10 +1,9 @@
-package test;
+package main;
 
 public class Seeds extends Item{
     // atribut
     private Season SeedsSeason;
     private int HarvDur;
-    private Gold SeedsPrice;
     // konstruktor
     /** Membuat object Seed Baru
      * syntax: Seeds(String name, Season S, int Dur, Gold Price)
@@ -13,18 +12,13 @@ public class Seeds extends Item{
      * @param int Dur
      * @param Gold Price
      */
-    public Seeds(String name, Season S, int Dur, Gold Price){
-       super(name);
+    public Seeds(String name, Season S, int Dur, int buyPrice){
+       super(name,buyPrice,0);
        this.SeedsSeason = S;
        this.HarvDur = Dur;
-       this.SeedsPrice = Price;
 
     }
-    @Override
-    
-    public String getItem(){
-        return Seeds;
-    }
+
     /**
      * memberikan nilai Harverst Duration dari seed
      * @return int
@@ -40,10 +34,7 @@ public class Seeds extends Item{
         /* memberika season dari seed */
         return this.SeedsSeason;
     }
-    
-    public Gold getPrice(Seeds seed){
-        return this.SeedsPrice;
-    }
+
     /**
      * mengubah nilai Harverst Duration dari seed
      * @param Seeds seed
@@ -60,13 +51,6 @@ public class Seeds extends Item{
     public void setSeedsSeason(Seeds seed, Season newSS){
         seed.SeedsSeason = newSS;
     }
-    /**
-     * memberikan nilai Harverst Duration dari seed
-     * @param Seeds seed
-     * @param Gold newPrice
-     */
-    public void setSeedsPrice(Seeds seed, Gold newPrice){
-        seed.SeedsPrice = newPrice;
-    }
+    
 
 }

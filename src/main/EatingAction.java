@@ -1,3 +1,4 @@
+package main;
 public class EatingAction implements Action {
     private EdibleItem edibleItem;
 

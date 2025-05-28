@@ -1,3 +1,4 @@
+package main;
 public enum Weather {
     SUNNY("Sunny"),
     RAINY("Rainy");

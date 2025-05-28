@@ -1,3 +1,4 @@
+package main;
 import NPC.RelationshipStatus;
 
 public class Proposing {

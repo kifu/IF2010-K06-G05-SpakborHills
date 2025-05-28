@@ -1,3 +1,4 @@
+package main;
 public class Fish extends EdibleItem {
     private Season[] fishSeason;
     private Time fishTime;

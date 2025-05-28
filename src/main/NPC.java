@@ -1,4 +1,4 @@
-package test;
+package main;
 import  java.util.ArrayList;
 import javax.swing.LookAndFeel;
 public class NPC{

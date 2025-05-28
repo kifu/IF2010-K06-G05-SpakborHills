@@ -1,3 +1,4 @@
+package main;
 public abstract class EdibleItem extends Item {
     protected int energyRestored;
 

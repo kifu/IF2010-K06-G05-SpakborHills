@@ -1,40 +1,29 @@
-package test;
-
-import java.util.FormatFlagsConversionMismatchException;
+package main;
 
 public class Tilling implements Action{
-    private int timeCost = 5;
-    private int energyCost = 5;
+    private final int timeCost = 5;
+    private final int energyCost = 5;
+    private Farm farm;
 
     @Override
     public void execute(Player player){
         if (canExecute(player)){
             System.out.println("Tilling");
-            player.setLocation('t');
+            farm.farmMap.interact();
             player.setEnergy(player.getEnergy() - 5); //ngurang energy
-            (player.getFarm()).advanceTime(); //ngurang waktu
+            farm.advanceTime(this.timeCost); // advance time 5 minutes
         }
     }
     @Override
-   public Time getTimeCost(){
+   public int getTimeCost(){
         return this.timeCost;
-   }
+    }
     @Override
     public int getEnergyCost(){
             return this.energyCost;
     }
     @Override
     public boolean canExecute(Player player){
-            if (player.getEnergy() < this.energyCost){
-                System.out.println("Not enough energy");
-                return false;
-            }
-            else if(player.getLocation() != '.'){
-                System.out.println("Not in the right location");
-                return false;
-            }
-            else{
-                return true;
-            }
+        return player.getEnergy() >= -20; // check if player has enough energy
     }
 }

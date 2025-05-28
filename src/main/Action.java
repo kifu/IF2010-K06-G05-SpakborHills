@@ -1,5 +1,4 @@
-<<<<<<< HEAD
-package test;
+package main;
 public interface Action{
     
     /**
@@ -18,7 +17,7 @@ public interface Action{
      * return time cost of action
      * @return Time
      */
-   public Time getTimeCost();
+   public int getTimeCost();
 
    /**
      * check if player can execute action
@@ -27,11 +26,3 @@ public interface Action{
      */
    public boolean canExecute(Player player);
 }
-=======
-public interface Action {
-    void execute(Player player);
-    int getEnergyCost();
-    int getTimeCost();
-    boolean canExecute(Player player);
-}
->>>>>>> 584929d21a22453a4c166c5284936d6b47f57131

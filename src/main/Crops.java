@@ -1,15 +1,10 @@
-package test;
+package main;
 
 public class Crops extends Item{
-    private int CropBuyPrice;
-    private int  CropSellPrice;
-    private int CropPerHarvest;
-
+    private int cropPerHarvest;
     public Crops(String cropname, int BuyPrice, int SellPrice, int CropPerHarvest){
-        super(cropname);
-        this.CropBuyPrice = BuyPrice;
-        this.CropSellPrice = SellPrice;
-        this.CropPerHarvest = CropPerHarvest;
+        super(cropname,BuyPrice,SellPrice);
+        this.cropPerHarvest = CropPerHarvest;
     }
     /**
      * memberikan crop
@@ -18,35 +13,8 @@ public class Crops extends Item{
     public Crops getCrops(){
         return this;
     }
-    /**
-     * mengembalikan Crop Buy Price
-     * @return int
-     */
-    public int getCropsBuyPrice(){
-        return this.CropBuyPrice;
-    }
-    /**
-     * mengembalikan Crop sell Price
-     * @return
-     */
-    public int getCropsSellPrice(){
-        return this.CropSellPrice;
-    }
-    /**
-     * mengubah nilai Crop Buy Price
-     * @param Crop
-     * @param int
-     */
-    public void setCropBuyPrice(Crops crop, int newPrice){
-        crop.CropBuyPrice = newPrice;
-    }
-    /**
-     * mengubah nilai crop sell price
-     * @param crop
-     * @param newPrice
-     */
-    public void setCropSellPrice(Crops crop, int newPrice){
-        crop.CropSellPrice = newPrice;
+    public int getCropPerHarvest(){
+        return this.cropPerHarvest;
     }
     /**
      * mengubah nilai qty harvest (crop per harvest)
@@ -54,6 +22,6 @@ public class Crops extends Item{
      * @param newQty
      */
     public void setCropPerHarevest(Crops crop, int newQty){
-        crop.CropPerHarvest = newQty;
+        crop.cropPerHarvest = newQty;
     }
 }
