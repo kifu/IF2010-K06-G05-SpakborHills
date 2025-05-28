@@ -1,3 +1,4 @@
+package main;
 public class Visiting {
     private FarmMap farmMap;
     private WorldMap worldMap;

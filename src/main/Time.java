@@ -1,3 +1,4 @@
+package main;
 public class Time {
     private int day; // 1-10
     private int hours; // 00-23

@@ -1,5 +1,6 @@
-import java.util.Scanner;
+package main;
 import java.util.Random;
+import java.util.Scanner;
 
 public class FarmMap {
     // Konstanta untuk ukuran peta dan simbol

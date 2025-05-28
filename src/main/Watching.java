@@ -1,3 +1,4 @@
+package main;
 public class Watching implements Action {
     private Time time;
     private WorldState worldState;

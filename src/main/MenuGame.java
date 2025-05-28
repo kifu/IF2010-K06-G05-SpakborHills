@@ -1,3 +1,4 @@
+package main;
 public class MenuGame {
     // Jika permainan belum dimulai
     public static void showMenuUnstarted() {

@@ -1,3 +1,4 @@
+package main;
 public class Chatting {
     private Player player;
     private NPC target;

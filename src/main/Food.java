@@ -1,3 +1,4 @@
+package main;
 public class Food extends EdibleItem {
     private Gold foodBuyPrice;
     private Gold foodSellPrice;

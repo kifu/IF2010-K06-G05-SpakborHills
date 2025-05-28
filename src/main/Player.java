@@ -1,3 +1,4 @@
+package main;
 public class Player {
     public static final int MAX_ENERGY = 100;
     public static final int MIN_ENERGY = -20;

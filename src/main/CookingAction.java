@@ -1,3 +1,4 @@
+package main;
 public class CookingAction implements Action {
     private Recipe recipe;
     private Item[] ingredients;
