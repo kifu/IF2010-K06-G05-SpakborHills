@@ -17,7 +17,7 @@ public class Player {
         this.energy = MAX_ENERGY; 
         this.farmName = farmName;
         this.partner = null; 
-        this.gold = 0; 
+        this.gold = 500; 
         this.inventory = new Inventory();
         this.location = "Farm"; 
     }
@@ -62,7 +62,7 @@ public class Player {
         this.farmName = farmName;
     }
     
-    public String partner() {
+    public String getPartner() {
         return partner;
     }
 
@@ -75,7 +75,7 @@ public class Player {
     }   
 
     public void setGold(int gold) {
-        this.gold = gold;
+        this.gold = 500;
     }
 
     public Inventory getInventory() {
@@ -92,5 +92,10 @@ public class Player {
 
     public void setLocation(String location) {
         this.location = location;
+    }
+
+    @Override
+    public String toString() {
+        return "Player: " + name + ", Gold: " + gold + "g, Energy: " + energy;
     }
 }

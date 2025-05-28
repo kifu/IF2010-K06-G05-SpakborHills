@@ -1,5 +1,5 @@
 public class BasicItem extends Item {
-    public BasicItem(String name) {
-        super(name, 0, 0);  // Harga dan value dummy, ganti sesuai kebutuhan
+    public BasicItem(String name, String category) {
+        super(name, category, 0, 0);  // Harga dan value dummy
     }
 }

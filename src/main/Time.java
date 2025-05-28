@@ -64,5 +64,7 @@ public class Time {
         this.hours = hour;
         this.minutes = minute;
     }
-
+    public int getTotalMinutes() {
+    return day * 1440 + hours * 60 + minutes;
+    }
 }

@@ -1,44 +1,58 @@
 import NPC.RelationshipStatus;
 
-public class Proposing {
-    private Player player;
+public class Proposing implements Action {
+    private static final int ACCEPTED_COST = 10;
+    private static final int REJECTED_COST = 20;
     private NPC target;
     private Time time;
 
-    public Proposing(Player player, NPC target, Time time) {
-        this.player = player;
+    public Proposing(NPC target, Time time) {
         this.target = target;
         this.time = time;
     }
 
-    public void execute() {
-        // Cek Proposal Ring di inventory
-        if (!player.getInventory().hasItem("Proposal Ring")) {
-            System.out.println("Kamu tidak memiliki Proposal Ring!");
-            return;
-        }
-
-        // Cek heartPoints NPC
-        if (target.getHeartPoint() < 150) {
-            System.out.println(target.getName() + " belum cukup dekat untuk dilamar.");
-            return;
-        }
-
-        // Cek status relationship
+    @Override
+    public void execute(Player player) {
         if (target.getRelationshipStatus() == RelationshipStatus.SINGLE) {
             target.setRelationshipStatus(RelationshipStatus.FIANCE);
-            target.setFianceDate(time.getHours() * 60 + time.getMinutes());
-            player.setEnergy(player.getEnergy() - 10);
-            time.advanceMinutes(getTimeCost());
+            target.setFianceDate(time.getTotalMinutes());
+            player.setEnergy(player.getEnergy() - ACCEPTED_COST);
             System.out.println(target.getName() + " menerima lamaranmu >_<!");
         } else {
-            player.setEnergy(player.getEnergy() - 20);
-            time.advanceMinutes(getTimeCost());
-            System.out.println(target.getName() + " menolak lamaranmu T_T.");
+            player.setEnergy(player.getEnergy() - REJECTED_COST);
+            System.out.println(target.getName() + " sudah tidak single! Lamaranmu ditolak, carilah yang masih single O_T.");
         }
+        time.advanceMinutes(getTimeCost());
     }
 
+    @Override
+    public boolean canExecute(Player player) {
+        if (!player.getInventory().hasItem("Proposal Ring")) {
+            System.out.println("Kamu tidak memiliki Proposal Ring! ((beli dulu sana -.-))");
+            return false;
+        }
+
+        if (target.getHeartPoint() < 150) {
+            System.out.println(target.getName() + " belum cukup dekat untuk dilamar. PDKT yg bener kidss");
+            return false;
+        }
+
+        if (player.getEnergy() < getEnergyCost()) {
+            System.out.println("Energi tidak cukup untuk melamar. Cari energi dulu gih");
+            return false;
+        }
+
+        return true;
+    }
+
+    @Override
+    public int getEnergyCost() {
+        return REJECTED_COST;
+    }
+
+    @Override
     public int getTimeCost() {
-        return 60; // 1 jam
+        return 60;
     }
 }
+

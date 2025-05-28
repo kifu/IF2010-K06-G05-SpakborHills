@@ -17,7 +17,7 @@ public class NPC {
     private int fianceDate;
 
     // Constructor
-    public NPC(String name, List<Item> lovedItems, List<Item> likedItems, List<Item> hatedItems) {
+    public NPC(String name, List<Item> lovedItems, List<Item> likedItems, List<Item> hatedItems, RelationshipStatus relationshipStatus) {
         this.name = name;
         this.heartPoint = 0;
         this.lovedItems = lovedItems;
@@ -66,7 +66,7 @@ public class NPC {
         this.name = name; 
     }
     public void setHeartPoint(int point) { 
-        this.heartPoint = point; 
+        this.heartPoint = Math.max(0, Math.min(150, point));
     }
     public void setChattingCount(int count) { 
         this.chattingCount = count; 
@@ -94,7 +94,7 @@ public class NPC {
     public void marry() {
         if (relationshipStatus == RelationshipStatus.FIANCE) {
             relationshipStatus = RelationshipStatus.SPOUSE;
-            System.out.println("Kamu dan " + name + " telah resmi menikah! 💍");
+            System.out.println("Kamu dan " + name + " telah resmi menikah! ヾ(￣▽￣)ヽ");
         }
     }
 
@@ -103,17 +103,33 @@ public class NPC {
     public void receiveGift(Item item) {
         giftingCount++;
         if (lovedItems.contains(item)) {
-            heartPoint += 25;
+            setHeartPoint(getHeartPoint() + 25);
             System.out.println(name + " sangat suka " + item.getName() + "! (+25)");
         } else if (likedItems.contains(item)) {
-            heartPoint += 20;
+            setHeartPoint(getHeartPoint() + 20);
             System.out.println(name + " suka " + item.getName() + " (+20)");
+        } else if (isSpecialHated(item)) {
+            setHeartPoint(getHeartPoint() - 25);
+            System.out.println(name + " benci " + item.getName() + " (-25)");
         } else if (hatedItems.contains(item)) {
-            heartPoint -= 25;
+            setHeartPoint(getHeartPoint() - 25);
             System.out.println(name + " benci " + item.getName() + " (-25)");
         } else {
             System.out.println(name + " menerima " + item.getName() + " dengan datar.");
         }
+    }
+
+    // Untuk NPC dengan hatedItems spesial yaitu Mayor Tadi, Perry
+    private boolean isSpecialHated(Item item) {
+        // untuk Mayor Tadi, seluruh item bukan loved/liked adalah hated
+        if (getName().equalsIgnoreCase("Mayor Tadi")) {
+            return !(lovedItems.contains(item) || likedItems.contains(item));
+        }
+        // untuk Perry, seluruh item kategori "Fish" adalah hated
+        if (getName().equalsIgnoreCase("Perry")) {
+            return item.getCategory().equalsIgnoreCase("Fish");
+        }
+        return false;
     }
 
     // Propose
@@ -133,9 +149,7 @@ public class NPC {
         return new RelationshipInfo(name, heartPoint, relationshipStatus);
     }
     public boolean isReadyToMarry(Time currentTime) {
-        int currentTotalMinutes = currentTime.getDay() * 1440 + currentTime.getHours() * 60 + currentTime.getMinutes();
-        return relationshipStatus == RelationshipStatus.FIANCE && currentTotalMinutes >= (fianceDate + 1440);
+    return relationshipStatus == RelationshipStatus.FIANCE&& currentTime.getTotalMinutes() >= (fianceDate + 1440);
     }
+
 }
-
-

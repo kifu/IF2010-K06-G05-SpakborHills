@@ -1,48 +1,57 @@
-public class Gifting {
-    private Player player;
+public class Gifting implements Action {
     private NPC target;
     private Item gift;
     private Time time;
 
-    public Gifting(Player player, NPC target, Item gift, Time time) {
-        this.player = player;
+    public Gifting(NPC target, Item gift, Time time) {
         this.target = target;
         this.gift = gift;
         this.time = time;
     }
 
-    public void execute() {
-        if (!player.getLocation().equalsIgnoreCase(target.getName() + " House")) {
-            System.out.println("Kamu harus berada di rumah " + target.getName() + " untuk memberikan hadiah.");
+    @Override
+    public void execute(Player player) {
+        if (!canExecute(player)) {
             return;
         }
-        if (!player.getInventory().hasItems(gift, 1)) {
-            System.out.println("Kamu tidak memiliki item " + gift.getName() + " di inventory.");
-            return;
-        }
-
-        if (target.getLovedItems().contains(gift)) {
-            target.setHeartPoint(target.getHeartPoint() + 25);
-            System.out.println(target.getName() + " sangat menyukai " + gift.getName() + "! (+25)");
-        } else if (target.getLikedItems().contains(gift)) {
-            target.setHeartPoint(target.getHeartPoint() + 20);
-            System.out.println(target.getName() + " suka " + gift.getName() + ". (+20)");
-        } else if (target.getHatedItems().contains(gift)) {
-            target.setHeartPoint(target.getHeartPoint() - 25);
-            System.out.println(target.getName() + " benci " + gift.getName() + "!! (-25)");
-        } else {
-            System.out.println(target.getName() + " menerima " + gift.getName() + " tanpa reaksi.");
-        }
-
-        player.getInventory().removeItem(gift, 1);
         target.receiveGift(gift);
 
-        player.setEnergy(player.getEnergy() - 5);
+        player.getInventory().removeItem(gift, 1);
+        player.setEnergy(player.getEnergy() - getEnergyCost());
         time.advanceMinutes(getTimeCost());
     }
 
+    @Override
+    public int getEnergyCost() {
+        return 5;
+    }
+
+    @Override
     public int getTimeCost() {
         return 10;
     }
-}
 
+    @Override
+    public boolean canExecute(Player player) {
+        String location;
+        if (target.getName().equalsIgnoreCase("Emily")) {
+            location = "Store";
+        } else {
+            location = target.getName() + " House";
+        }
+        if (!player.getLocation().equalsIgnoreCase(location)) {
+            System.out.println("Kamu harus berada di " + location + " untuk memberikan hadiah ￣へ￣.");
+            return false; 
+        }
+
+        if (!player.getInventory().hasItems(gift, 1)) {
+            System.out.println("Kamu tidak memiliki item " + gift.getName() + " di inventory. Beli dulu sana (* ￣︿￣).");
+            return false;
+        }
+        if (player.getEnergy() < getEnergyCost()) {
+            System.out.println("Energi kamu tidak cukup untuk memberikan hadiah.");
+            return false;
+        }
+        return true;
+    }
+}
