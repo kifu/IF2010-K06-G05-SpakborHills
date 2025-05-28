@@ -57,6 +57,15 @@ public class Inventory {
         return inventory.getOrDefault(item, 0);
     }
 
+    public Item getItemByName(String name) {
+        for (Item item : inventory.keySet()) {
+            if (item.getName().equalsIgnoreCase(name)) {
+                return item;
+            }
+        }
+        return null;
+    }
+    
     public void displayInventory() {
         System.out.println("Inventory:");
         for (Map.Entry<Item, Integer> entry : inventory.entrySet()) {
