@@ -28,7 +28,7 @@ public class Visiting {
         worldState.getCurrentTime().advanceMinutes(15);
         player.setEnergy(player.getEnergy() - 10);
         player.setLocation("WorldMap");
-        worldMap.movePlayerToVillage();
+        worldMap.movePlayerToFarmMap();
         System.out.println("Kamu telah visiting ke World Map (Village). -10 energi, +15 menit.");
         worldMap.displayMap();
     }
