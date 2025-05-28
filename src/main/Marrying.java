@@ -11,6 +11,12 @@ public class Marrying implements Action {
 
     @Override
     public void execute(Player player) {
+        if (target.getName().equalsIgnoreCase("Mayor Tadi") &&
+            target.getRelationshipStatus() == RelationshipStatus.SPOUSE) {
+            System.out.println("Mayor Tadi sudah menikah dan tidak bisa menikah lagi. Cari cwk lain ψ(._. )>");
+            return;
+        }
+
         if (!player.getInventory().hasItem("Proposal Ring")) {
             System.out.println("Kamu tidak memiliki Proposal Ring! ((beli dulu sana -.-))");
             return;
