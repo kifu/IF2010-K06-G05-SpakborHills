@@ -8,6 +8,13 @@ public class Selling implements Action {
         this.shippingBin = shippingBin;
         this.worldState = worldState;
     }
+    /**
+     * Menghitung total harga jual dari item yang akan dijual.
+     */
+    public int getTotalSellPrice(Item item, int quantity) {
+        if (item == null || quantity <= 0) return 0;
+        return item.getSellPrice() * quantity;
+    }
 
     /**
      * Proses menaruh item ke shipping bin untuk dijual.
@@ -52,6 +59,9 @@ public class Selling implements Action {
                 System.out.println("Input tidak valid. Masukkan angka.");
             }
         }
+         int totalPrice = getTotalSellPrice(selected, quantity);
+        System.out.println("Total harga jual: " + totalPrice + "g");
+
 
         // Tambahkan ke shipping bin (waktu tidak berjalan di sini)
         boolean success = shippingBin.addItem(selected, quantity, inventory);

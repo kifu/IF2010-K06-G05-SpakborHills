@@ -176,7 +176,7 @@ public class WorldMap {
     // Untuk testing/akses lokasi area
     public int[] getAreaLocation(String areaName) {
         return locations.get(areaName);
-    }
+    }   
 
     // Cek apakah player berada tepat di lokasi area spesifik
     public boolean isAtArea(String areaName) {
@@ -193,38 +193,5 @@ public class WorldMap {
     }
 
     // Main method for testing
-    public static void main(String[] args) {
-        WorldMap world = new WorldMap();
-        Scanner scanner = new Scanner(System.in);
-
-        System.out.println("=== SELAMAT DATANG DI WORLD MAP ===");
-        System.out.println("Gunakan W/A/S/D untuk bergerak, I untuk interaksi, Q untuk keluar WorldMap");
-
-        while (true) {
-            world.displayMap();
-            System.out.print("\nMasukkan perintah: ");
-            String input = scanner.nextLine().trim();
-            if (input.length() == 0) continue;
-            char command = Character.toLowerCase(input.charAt(0));
-            switch (command) {
-                case 'w': case 'a': case 's': case 'd':
-                    if (!world.movePlayer(command)) {
-                        System.out.println("Tidak bisa bergerak ke arah tersebut!");
-                        try { Thread.sleep(1000); } catch (InterruptedException e) {}
-                    }
-                    break;
-                case 'i':
-                    world.interact();
-                    try { Thread.sleep(1500); } catch (InterruptedException e) {}
-                    break;
-                case 'q':
-                    System.out.println("Keluar dari World Map.");
-                    return;
-                default:
-                    System.out.println("Perintah tidak dikenal!");
-                    try { Thread.sleep(1000); } catch (InterruptedException e) {}
-            }
-            scanner.close();
-        }
-    }
+   
 }
