@@ -78,6 +78,18 @@ public class Player {
         this.gold = gold;
     }
 
+    public void addGold(int amount) {
+        if (amount > 0) {
+            this.gold += amount;
+        }
+    }
+
+    public void subtractGold(int amount) {
+        if (amount > 0 && this.gold >= amount) {
+            this.gold -= amount;
+        }
+    }
+
     public Inventory getInventory() {
         return inventory;
     }
@@ -86,12 +98,24 @@ public class Player {
         this.inventory = inventory;
     }
 
+    public void showInventory() {
+        inventory.displayInventory();
+    }
+
     public String getLocation() {
         return location.getName();
     }
 
     public void setLocation(Location location) {
         this.location = location;
+    }
+
+    public void setLocation(String locationName) {
+        this.location = new Location(locationName);
+    }
+
+    public void showLocation() {
+        System.out.println("Current Location: " + location.getName());
     }
 
     @Override
