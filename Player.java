@@ -9,7 +9,7 @@ public class Player {
     private String partner;
     private int gold;
     private Inventory inventory;
-    private String location;
+    private Location location;
 
     public Player(String name, String gender, String farmName) {
         this.name = name;
@@ -19,7 +19,7 @@ public class Player {
         this.partner = null; 
         this.gold = 500; // Initial gold amount
         this.inventory = new Inventory();
-        this.location = "Farm"; 
+        this.location = new Location("Farm"); 
     }
 
     public String getName() {
@@ -87,10 +87,10 @@ public class Player {
     }
 
     public String getLocation() {
-        return location;
+        return location.getName();
     }
 
-    public void setLocation(String location) {
+    public void setLocation(Location location) {
         this.location = location;
     }
 
