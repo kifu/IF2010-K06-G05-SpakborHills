@@ -1,14 +1,14 @@
 public class Furniture extends Item {
     public Furniture(String name, int buyPrice, int sellPrice) {
-        super(name, buyPrice, sellPrice);
+        super("Furniture", name, buyPrice, sellPrice);
+    }
+
+    public Furniture getFurniture() {
+        return this;
     }
 
     @Override
     public String toString() {
-        return "Furniture{" +
-                "name='" + getName() + '\'' +
-                ", buyPrice=" + getBuyPrice() +
-                ", sellPrice=" + getSellPrice() +
-                '}';
+        return super.toString();
     }
 }
