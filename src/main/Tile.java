@@ -1,20 +1,31 @@
 package main;
-public class Tiles{
-    private Tiletype type;
+public class Tile{
+    private TileType type;
     private boolean isWatered;
     private Seeds plantedItem;
     private int daysGrown;
 
-    public enum Tiletype{
-        Soil, Tilled, Planted
+    public enum TileType{
+        Soil("Soil"),
+        Tilled("Tilled"),
+        Planted("Planted"),
+        Harvest("Harvest");
+
+        public String displayName;
+        TileType(String displayName) {
+            this.displayName = displayName;
+        }
+        public String getDisplayName() {
+            return displayName;
+        }
     }
-    public Tiles(){
-        this.type = Soil;
-        this.isWatered = True;
+    public Tile(){
+        this.type = TileType.Soil;
+        this.isWatered = true;
         this.plantedItem = null;
         this.daysGrown = 0;
     }
-    public Tiles(TileType type, boolean isWatered, Seeds plantedItem, int daysGrown){
+    public Tile(TileType type, boolean isWatered, Seeds plantedItem, int daysGrown){
         this.type = type;
         this.isWatered = isWatered;
         this.plantedItem = plantedItem;
@@ -24,14 +35,14 @@ public class Tiles{
      * mengembalikan tipe tile yang dipijak
      * @return Tiletype 
      */
-    public Tiletype getType(){
+    public TileType getType(){
         return this.type;
     }
     /**
      * memengubah tipe tile pada posisi player yang dipijak 
      * @param Tiletype
      */
-    public void setType(Tiletype newtype){
+    public void setType(TileType newtype){
         this.type = newtype;
     }
     /**
@@ -52,7 +63,7 @@ public class Tiles{
      * memengembalikan item yang ditanam pada tiled lad
      * @return Tiletype 
      */
-    public Tiletype getPlanted(){
+    public Seeds getPlanted(){
         return this.plantedItem;
     }
     /**
@@ -70,7 +81,10 @@ public class Tiles{
     public boolean isHarvestable(){
         if (this.daysGrown == this.plantedItem.getHarvestDuration()){
             this.daysGrown = 0;
-            return True;
+            return true;
+        }
+        else{
+            return false;
         }
     
     }

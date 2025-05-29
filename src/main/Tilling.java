@@ -5,6 +5,14 @@ public class Tilling implements Action{
     private final int energyCost = 5;
     private Farm farm;
 
+
+    /**
+     * assign farm to Tilling as Attribute
+     * @param farm
+     */
+    public void assignFarm(Farm farm){
+        this.farm = farm;
+    }
     @Override
     public void execute(Player player){
         if (canExecute(player)){
