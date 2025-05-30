@@ -8,11 +8,11 @@ public class Inventory {
         inventory = new LinkedHashMap<>();  
         
         // Menambahkan beberapa item awal ke inventory
-        inventory.put(new Seeds("Parsnips Seeds", Season.SPRING, 1, 20), 15);
-        inventory.put(new Equipment("Hoe"), 1);
-        inventory.put(new Equipment("Watering Can"), 1);
-        inventory.put(new Equipment("Pickaxe"), 1);
-        inventory.put(new Equipment("Fishing Rod"), 1);
+        // inventory.put(new Seeds("Parsnips Seeds", Season.SPRING, 1, 20), 15);
+        // inventory.put(new Equipment("Hoe"), 1);
+        // inventory.put(new Equipment("Watering Can"), 1);
+        // inventory.put(new Equipment("Pickaxe"), 1);
+        // inventory.put(new Equipment("Fishing Rod"), 1);
     }
 
     public void addItem(Item item, int quantity) {

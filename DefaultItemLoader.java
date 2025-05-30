@@ -100,24 +100,4 @@ public class DefaultItemLoader {
 
         return new ArrayList<>(initialItemSet);
     }      
-    
-    // public List<Recipe> LoadAllRecipes() {
-    //     List<Recipe> recipes = new ArrayList<>();
-
-    //     // Resep untuk Fish n' Chips
-    //     Recipe fishNChipsRecipe = new Recipe("Fish n’ Chips", 1, 1, 10);
-    //     fishNChipsRecipe.addIngredient(new Item("Fish", 1));
-    //     fishNChipsRecipe.addIngredient(new Item("Potato", 1));
-    //     fishNChipsRecipe.setResult(new Item("Fish n’ Chips"));
-    //     recipes.add(fishNChipsRecipe);
-
-    //     // Resep untuk Fish Sandwich
-    //     Recipe fishSandwichRecipe = new Recipe("Fish Sandwich", 1, 1, 15);
-    //     fishSandwichRecipe.addIngredient(new Item("Fish", 1));
-    //     fishSandwichRecipe.addIngredient(new Item("Bread", 1));
-    //     fishSandwichRecipe.setResult(new Item("Fish Sandwich"));
-    //     recipes.add(fishSandwichRecipe);
-
-    //     return recipes;
-    // }
 }
