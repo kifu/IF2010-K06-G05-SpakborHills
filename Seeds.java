@@ -11,11 +11,10 @@ public class Seeds extends Item{
      * @param int Dur
      * @param Gold Price
      */
-    public Seeds(String name, Season seedsSeason , int harvDur, int buyPrice, int sellPrice){
-       super("Seeds", name, buyPrice, sellPrice);
+    public Seeds(String name, Season seedsSeason , int harvDur, int buyPrice) {
+       super("Seeds", name, buyPrice, buyPrice / 2);
        this.seedsSeason = seedsSeason;
        this.harvDur = harvDur;
-
     }
 
     public Seeds getSeeds(){

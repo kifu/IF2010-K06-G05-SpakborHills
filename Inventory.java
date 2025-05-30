@@ -8,7 +8,7 @@ public class Inventory {
         inventory = new LinkedHashMap<>();  
         
         // Menambahkan beberapa item awal ke inventory
-        // inventory.put(new Seeds("Parsnips Seeds", 20, 10), 15);
+        inventory.put(new Seeds("Parsnips Seeds", Season.SPRING, 1, 20), 15);
         inventory.put(new Equipment("Hoe"), 1);
         inventory.put(new Equipment("Watering Can"), 1);
         inventory.put(new Equipment("Pickaxe"), 1);
@@ -52,5 +52,15 @@ public class Inventory {
             Item item = entry.getKey();
             System.out.println(item.getName() + " x" + getItemQuantity(item));
         }
+    }
+
+    // Untuk item yang buyOnce saja
+    public boolean hasItem(Item item) {
+        for (Item invItem : inventory.keySet()) {
+            if (invItem.equals(item)) {
+                return true;
+            }
+        }
+        return false;
     }
 }
