@@ -2,6 +2,7 @@ package main;
 
 public class Crops extends Item{
     private int cropPerHarvest;
+    
     /**
      * Constructor untuk kelas Crops
      * @param cropname nama dari crop
