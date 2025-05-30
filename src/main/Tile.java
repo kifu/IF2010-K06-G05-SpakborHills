@@ -31,6 +31,7 @@ public class Tile{
         this.plantedItem = plantedItem;
         this.daysGrown = daysGrown;
     }
+    
     /**
      * mengembalikan tipe tile yang dipijak
      * @return Tiletype 
@@ -38,6 +39,7 @@ public class Tile{
     public TileType getType(){
         return this.type;
     }
+
     /**
      * memengubah tipe tile pada posisi player yang dipijak 
      * @param Tiletype
@@ -45,6 +47,7 @@ public class Tile{
     public void setType(TileType newtype){
         this.type = newtype;
     }
+
     /**
      * memberikan nilai boolean pada kondisi isWatered
      * @return boolean 
@@ -52,6 +55,7 @@ public class Tile{
     public boolean isWatered(){
         return this.isWatered;
     }
+
     /**
      * mengubah kondisi isWatered tanah
      * @param boolean 
@@ -59,12 +63,21 @@ public class Tile{
     public void setIsWatered(boolean status){
         this.isWatered = status;
     }
+
     /**
      * memengembalikan item yang ditanam pada tiled lad
      * @return Tiletype 
      */
     public Seeds getPlanted(){
         return this.plantedItem;
+    }
+
+    /**
+     * mengubah item yang ditanam pada tiled lad
+     * @param Seeds
+     */
+    public void setPlanted(Seeds seedsPlanted){
+        this.plantedItem = seedsPlanted;
     }
     /**
      * menunjukan progress harian dari tile

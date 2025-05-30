@@ -18,7 +18,14 @@ public class Seeds extends Item{
        this.HarvDur = Dur;
 
     }
-
+    /**
+     * memberikan nilai nama dari seed
+     * @return String
+     */
+    @Override
+    public String getName(){
+        return super.getName().concat("Seeds");
+    }
     /**
      * memberikan nilai Harverst Duration dari seed
      * @return int
