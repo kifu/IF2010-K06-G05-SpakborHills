@@ -24,6 +24,10 @@ public class House {
         for (int i = 0; i < MAP_SIZE; i++) Arrays.fill(map[i], EMPTY);
     }
 
+    public boolean isPlayerAtExit() {
+        return playerY == MAP_SIZE - 1;
+    }
+
     private void clearFurniture() {
         furnitures.clear();
         initializeMap();
@@ -107,11 +111,11 @@ public class House {
         }
         Furniture adjacent = getAdjacentFurniture();
         if (adjacent != null) {
-            System.out.println("\n[!] Kamu berada dekat dengan " + adjacent.getName() + ". " + getActionMessageForFurniture(adjacent));
+            System.out.println("\n[!] Kamu berada dekat dengan " + adjacent.getName() + ".");
         }
         System.out.println("\nPosisi Player: (" + playerX + ", " + playerY + ")");
-        System.out.println("Kontrol: W(atas) A(kiri) S(bawah) D(kanan) E(use/interaksi) Q(keluar rumah)");
-        System.out.println("Legenda: S=SingleBed Q=QueenBed K=KingBed V=Stove T=TV");
+        // System.out.println("Kontrol: W(atas) A(kiri) S(bawah) D(kanan) E(use/interaksi) Q(keluar rumah)");
+        // System.out.println("Legenda: S=SingleBed Q=QueenBed K=KingBed V=Stove T=TV");
     }
 
     public boolean movePlayer(char direction) {
@@ -168,18 +172,18 @@ public class House {
         f.use(player);
     }
 
-    private String getActionMessageForFurniture(Furniture f) {
-        String id = f.getId();
-        if (id.startsWith("bed_")) {
-            return "Tekan [E] untuk tidur di kasur ini.";
-        } else if (id.equals("stove")) {
-            return "Tekan [E] untuk memasak makanan di sini.";
-        } else if (id.equals("tv")) {
-            return "Tekan [E] untuk menonton TV (melihat ramalan cuaca).";
-        } else {
-            return "Tekan [E] untuk berinteraksi.";
-        }
-    }
+    // private String getActionMessageForFurniture(Furniture f) {
+    //     String id = f.getId();
+    //     if (id.startsWith("bed_")) {
+    //         return "Tekan [E] untuk tidur di kasur ini.";
+    //     } else if (id.equals("stove")) {
+    //         return "Tekan [E] untuk memasak makanan di sini.";
+    //     } else if (id.equals("tv")) {
+    //         return "Tekan [E] untuk menonton TV (melihat ramalan cuaca).";
+    //     } else {
+    //         return "Tekan [E] untuk berinteraksi.";
+    //     }
+    // }
     // Test Main
     public static void main(String[] args) {
         // --- Pilihan layout ---

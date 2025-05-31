@@ -80,8 +80,8 @@ public class WorldState {
         if (this.currentWeather == Weather.RAINY) {
             rainyDaysThisSeasonCounter++;
         }
-        System.out.println("Weather For Day " + this.currentTime.getDay() + ": " + this.currentWeather.getDisplayName());
-        applyWeatherEffects();
+        // System.out.println("Weather For Day " + this.currentTime.getDay() + ": " + this.currentWeather.getDisplayName());
+        // applyWeatherEffects();
     }
 
     private Weather determineWeatherForNewDay() {

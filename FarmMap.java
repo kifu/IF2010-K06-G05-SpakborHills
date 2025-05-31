@@ -26,12 +26,9 @@ public class FarmMap {
         map = new char[MAP_SIZE][MAP_SIZE];
         initializeMap();
         placeObjects();
-        // PERUBAHAN DIMULAI DI SINI: Panggil method baru untuk menempatkan player
         placePlayer(); 
-        // PERUBAHAN SELESAI DI SINI
     }
 
-    // ========== BAGIAN KODE YANG TIDAK BERUBAH ==========
     public int getPlayerX() {
         return this.playerX;
     }
@@ -53,6 +50,30 @@ public class FarmMap {
         }
     }
     
+    public String getAdjacentObjectName() {
+        int[] dx = {0, 0, -1, 1}; // Atas, Bawah, Kiri, Kanan
+        int[] dy = {-1, 1, 0, 0};
+        
+        for (int i = 0; i < 4; i++) {
+            int adjX = playerX + dx[i];
+            int adjY = playerY + dy[i];
+            
+            if (adjX >= 0 && adjX < MAP_SIZE && adjY >= 0 && adjY < MAP_SIZE) {
+                char tile = map[adjY][adjX];
+                switch (tile) {
+                    case HOUSE:
+                        return "House";
+                    case POND:
+                        return "Pond";
+                    case SHIPPING_BIN:
+                        return "Shipping Bin";
+                }
+            }
+        }
+        
+        return null; // Tidak ada objek interaktif di sekitar
+    }
+
     private void initializeMap() {
         for (int i = 0; i < MAP_SIZE; i++) {
             for (int j = 0; j < MAP_SIZE; j++) {
@@ -85,11 +106,8 @@ public class FarmMap {
         }
     }
 
-    // Menempatkan player di depan pintu rumah.
     private void placePlayer() {
-        // Posisi X pemain diatur di tengah-tengah rumah (lebar rumah 6)
         this.playerX = this.houseX + 3; 
-        // Posisi Y pemain diatur 1 petak di bawah rumah (tinggi rumah 6)
         this.playerY = this.houseY + 6;
 
         if (this.playerY >= MAP_SIZE) {
@@ -102,7 +120,6 @@ public class FarmMap {
 
 
     private void placeShippingBin() {
-        // Cari posisi yang berjarak 1 dari rumah
         if (houseX + 7 < MAP_SIZE - 3) {
             shippingBinX = houseX + 7;
             shippingBinY = houseY;
@@ -158,15 +175,6 @@ public class FarmMap {
         }
         
         System.out.println("\nPosisi Player: (" + playerX + ", " + playerY + ")");
-        System.out.println("Kontrol: W(atas) A(kiri) S(bawah) D(kanan) I(interaksi) Q(keluar)");
-        
-        if (canInteract()) {
-            System.out.println("Tekan 'I' untuk berinteraksi dengan objek terdekat!");
-        }
-        
-        if (canVisit()) {
-            System.out.println("Anda berada di ujung peta. Tekan 'V' untuk visiting!");
-        }
     }
     
     public boolean movePlayer(char direction) {
@@ -199,55 +207,12 @@ public class FarmMap {
         return tile != HOUSE && tile != POND && tile != SHIPPING_BIN;
     }
     
-    private boolean canInteract() {
-        int[] dx = {0, 0, -1, 1};
-        int[] dy = {-1, 1, 0, 0};
-        
-        for (int i = 0; i < 4; i++) {
-            int adjX = playerX + dx[i];
-            int adjY = playerY + dy[i];
-            
-            if (adjX >= 0 && adjX < MAP_SIZE && adjY >= 0 && adjY < MAP_SIZE) {
-                char tile = map[adjY][adjX];
-                if (tile == HOUSE || tile == POND || tile == SHIPPING_BIN) {
-                    return true;
-                }
-            }
-        }
-        
-        return false;
-    }
-    
     public boolean canVisit() {
         return playerX == MAP_SIZE - 1 && playerY == 0;
     }
     
     public void interact() {
-        int[] dx = {0, 0, -1, 1};
-        int[] dy = {-1, 1, 0, 0};
-        
-        for (int i = 0; i < 4; i++) {
-            int adjX = playerX + dx[i];
-            int adjY = playerY + dy[i];
-            
-            if (adjX >= 0 && adjX < MAP_SIZE && adjY >= 0 && adjY < MAP_SIZE) {
-                char tile = map[adjY][adjX];
-                
-                if (tile == HOUSE) {
-                    System.out.println("Anda berinteraksi dengan rumah! Selamat datang di rumah Anda!");
-                    return;
-                } else if (tile == POND) {
-                    System.out.println("Anda memancing di kolam! Anda mendapat ikan!");
-                    return;
-                } else if (tile == SHIPPING_BIN) {
-                    System.out.println("Anda menggunakan shipping bin! Barang-barang Anda dijual!");
-                    return;
-                }
-            }
-        }
-        
         char currentTile = map[playerY][playerX];
-        
         if (currentTile == TILLABLE_LAND) {
             System.out.println("Anda mengolah tanah menjadi siap tanam!");
             map[playerY][playerX] = TILLED_LAND;
@@ -261,7 +226,6 @@ public class FarmMap {
             map[playerY][playerX] = TILLABLE_LAND;
             return;
         }
-        
         System.out.println("Tidak ada yang bisa diinteraksi di sini.");
     }
     
@@ -284,36 +248,21 @@ public class FarmMap {
             farm.displayMap();
             System.out.print("\nMasukkan perintah: ");
             String input = scanner.nextLine().trim();
-            
             if (input.length() == 0) continue;
-            
             char command = Character.toLowerCase(input.charAt(0));
-            
             switch (command) {
-                case 'w':
-                case 'a':
-                case 's':
-                case 'd':
+                case 'w': case 'a': case 's': case 'd':
                     if (!farm.movePlayer(command)) {
                         System.out.println("Tidak bisa bergerak ke arah tersebut!");
-                        try { Thread.sleep(1000); } catch (InterruptedException e) {}
                     }
                     break;
-                case 'i':
-                    farm.interact();
-                    try { Thread.sleep(1500); } catch (InterruptedException e) {}
-                    break;
-                case 'v':
-                    farm.visit();
-                    try { Thread.sleep(1500); } catch (InterruptedException e) {}
-                    break;
+                case 'i': farm.interact(); break;
+                case 'v': farm.visit(); break;
                 case 'q':
                     System.out.println("Terima kasih telah bermain!");
                     scanner.close();
                     return;
-                default:
-                    System.out.println("Perintah tidak dikenal!");
-                    try { Thread.sleep(1000); } catch (InterruptedException e) {}
+                default: System.out.println("Perintah tidak dikenal!");
             }
         }
     }
