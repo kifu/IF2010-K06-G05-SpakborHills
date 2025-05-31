@@ -4,13 +4,13 @@ import java.util.Random;
 public class FarmMap {
     // Konstanta untuk ukuran peta dan simbol
     private static final int MAP_SIZE = 32;
-    private static final char TILLABLE_LAND = '.';
-    private static final char TILLED_LAND = 't';
-    private static final char PLANTED_LAND = 'l';
-    private static final char HOUSE = 'h';
-    private static final char POND = 'o';
-    private static final char SHIPPING_BIN = 's';
-    private static final char PLAYER = 'p';
+    public static final char TILLABLE_LAND = '.';
+    public static final char TILLED_LAND = 't';
+    public static final char PLANTED_LAND = 'l';
+    public static final char HOUSE = 'h';
+    public static final char POND = 'o';
+    public static final char SHIPPING_BIN = 's';
+    public static final char PLAYER = 'p';
     
     // Grid peta dan posisi player
     private char[][] map;
@@ -29,6 +29,28 @@ public class FarmMap {
         // Player dimulai di tengah peta
         playerX = 16;
         playerY = 16;
+    }
+
+    public int getPlayerX() {
+        return this.playerX;
+    }
+
+    public int getPlayerY() {
+        return this.playerY;
+    }
+
+    // Tambahkan getter untuk karakter tile di peta pada koordinat tertentu
+    public char getCharMapTile(int x, int y) {
+        if (x >= 0 && x < MAP_SIZE && y >= 0 && y < MAP_SIZE) {
+            return map[y][x];
+        }
+        return ' '; 
+    }
+
+    public void setCharMapTile(int x, int y, char tileChar) {
+        if (x >= 0 && x < MAP_SIZE && y >= 0 && y < MAP_SIZE) {
+            this.map[y][x] = tileChar;
+        }
     }
     
     // Menginisialisasi seluruh peta dengan tillable land
