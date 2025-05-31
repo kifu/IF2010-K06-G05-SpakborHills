@@ -15,6 +15,10 @@ public class Inventory {
         // inventory.put(new Equipment("Fishing Rod"), 1);
     }
 
+    public Map<Item, Integer> getInventory() {
+        return inventory;
+    }
+
     public void addItem(Item item, int quantity) {
         if (inventory.containsKey(item)) {
             inventory.put(item, inventory.get(item) + quantity);
@@ -63,4 +67,14 @@ public class Inventory {
         }
         return false;
     }
+
+    public Item getItemByName(String name) {
+    if (name == null || name.trim().isEmpty()) return null;
+    for (Item item : inventory.keySet()) {
+        if (item.getName().equalsIgnoreCase(name.trim())) {
+            return item;
+        }
+    }
+    return null;
+}
 }

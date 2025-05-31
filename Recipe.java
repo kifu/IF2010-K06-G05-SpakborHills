@@ -1,3 +1,4 @@
+import java.util.List;
 import java.util.Map;
 
 public class Recipe {
@@ -33,6 +34,15 @@ public class Recipe {
 
     public void setIngredients(Map<String, Integer> ingredients) {
         this.ingredients = ingredients;
+    }
+
+    public static Recipe findRecipeByName(List<Recipe> recipes, String name) {
+        for (Recipe recipe : recipes) {
+            if (recipe.getRecipeName().equalsIgnoreCase(name)) {
+                return recipe;
+            }
+        }
+        return null;
     }
 
     @Override

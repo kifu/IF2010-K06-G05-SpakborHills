@@ -1,3 +1,4 @@
+import java.util.List;
 import java.util.Objects;
 
 public abstract class Item {
@@ -43,6 +44,15 @@ public abstract class Item {
     
     public void setSellPrice(int sellPrice) {
         this.sellPrice = sellPrice;
+    }
+
+    public static Item findItemByName(List<Item> items, String name) {
+        for (Item item : items) {
+            if (item.getName().equalsIgnoreCase(name)) {
+                return item;
+            }
+        }
+        return null;
     }
 
     @Override

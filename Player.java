@@ -6,7 +6,7 @@ public class Player {
     private String gender;
     private int energy;
     private String farmName;
-    private String partner;
+    private NPC partner;
     private int gold;
     private Inventory inventory;
     private Location location;
@@ -62,11 +62,11 @@ public class Player {
         this.farmName = farmName;
     }
     
-    public String getPartner() {
+    public NPC getPartner() {
         return partner;
     }
 
-    public void setPartner(String partner) {
+    public void setPartner(NPC partner) {
         this.partner = partner;
     }
 
@@ -118,8 +118,24 @@ public class Player {
         System.out.println("Current Location: " + location.getName());
     }
 
+    public boolean hasItemInInventory(String itemName) {
+    for (Item item : this.inventory.getInventory().keySet()) {
+        if (item.getName().equalsIgnoreCase(itemName)) {
+            return true;
+        }
+    }
+    return false;
+    }
+
     @Override
     public String toString() {
-        return "Player: " + name + ", Gold: " + gold + "g, Energy: " + energy;
+        String partnerInfo = "Belum Punya Pasangan";
+        if (partner != null) {
+            partnerInfo = "Pasangan: " + partner.getName() + " (" + partner.getRelationshipStatus() + ")";
+        }
+        return "Player: " + name + 
+               ", Gold: " + gold + "g" +
+               ", Energy: " + energy + 
+               ", " + partnerInfo;
     }
 }
