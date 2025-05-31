@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.Set;
 
 public class DefaultItemLoader {
+    public WorldState worldState;
+
     public List<Item> loadInitialItems() {
         Set<Item> initialItemSet = new LinkedHashSet<>();
 
@@ -89,9 +91,9 @@ public class DefaultItemLoader {
         initialItemSet.add(new Misc("Proposal Ring", 3000, -1));
 
         // Furniture
-        initialItemSet.add(new Furniture("Queen Bed", 10000, -1));
-        initialItemSet.add(new Furniture("King Bed", 15000, -1));
-        initialItemSet.add(new Furniture("Stove", 7500, -1));
+        initialItemSet.add(new QueenBed(worldState));
+        initialItemSet.add(new KingBed(worldState));
+        initialItemSet.add(new Stove());
 
 
         // Resep yang bisa dibeli
