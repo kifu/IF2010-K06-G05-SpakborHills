@@ -1,3 +1,6 @@
+import java.util.ArrayList; 
+import java.util.List; 
+
 public class Player {
     public static final int MAX_ENERGY = 100;
     public static final int MIN_ENERGY = -20;
@@ -10,6 +13,8 @@ public class Player {
     private int gold;
     private Inventory inventory;
     private Location location;
+    private List<String> ownedFurniture;
+    private List<Recipe> unlockedRecipes;
 
     public Player(String name, String gender, String farmName) {
         this.name = name;
@@ -20,6 +25,8 @@ public class Player {
         this.gold = 500; // Initial gold amount
         this.inventory = new Inventory();
         this.location = new Location("Farm"); 
+        this.ownedFurniture = new ArrayList<>();
+        this.unlockedRecipes = new ArrayList<>();
     }
 
     public String getName() {
@@ -116,6 +123,35 @@ public class Player {
 
     public void showLocation() {
         System.out.println("Current Location: " + location.getName());
+    }
+
+    public void addOwnedFurniture(String furnitureName) {
+        if (!this.ownedFurniture.contains(furnitureName)) {
+            this.ownedFurniture.add(furnitureName);
+        }
+    }
+
+    public boolean hasOwnedFurniture(String furnitureName) {
+        return this.ownedFurniture.contains(furnitureName);
+    }
+
+    public List<Recipe> getUnlockedRecipes() {
+        return this.unlockedRecipes;
+    }
+
+    public boolean hasRecipe(String recipeName) {
+        for (Recipe r : unlockedRecipes) {
+            if (r.getRecipeName().equalsIgnoreCase(recipeName)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public void unlockRecipe(Recipe recipe) {
+        if (recipe != null && !hasRecipe(recipe.getRecipeName())) {
+            this.unlockedRecipes.add(recipe);
+        }
     }
 
     public boolean hasItemInInventory(String itemName) {

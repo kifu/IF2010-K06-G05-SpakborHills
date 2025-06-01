@@ -55,7 +55,7 @@ public class WorldState {
     
     // Menangani perubahan hari
     public void handleNewDay() { 
-        System.out.println("------------------------------------");
+        System.out.println("\n------------------------------------");
         System.out.println("Hari baru dimulai! : Day " + currentTime.getDay());
         dayInSeasonCounter++;
 

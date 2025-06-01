@@ -68,6 +68,18 @@ public class Inventory {
         return false;
     }
 
+    public boolean hasItem(String itemName) {
+        if (itemName == null || itemName.trim().isEmpty()) {
+            return false;
+        }
+        for (Item invItem : inventory.keySet()) {
+            if (invItem.getName().equalsIgnoreCase(itemName.trim())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public Item getItemByName(String name) {
     if (name == null || name.trim().isEmpty()) return null;
     for (Item item : inventory.keySet()) {

@@ -31,8 +31,9 @@ public class MenuGame {
         System.out.println("5. Actions");
         System.out.println("6. Credits");
         System.out.println("7. Exit");
+        System.out.println("8. Menu Cheats (Dev)");
         System.out.println("=======================");
-        System.out.print("Pilih aksi (1-7): ");
+        System.out.print("Pilih aksi (1-8): ");
     }
 
     public static void main(String[] args) {

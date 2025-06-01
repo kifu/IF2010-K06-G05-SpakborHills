@@ -8,8 +8,6 @@ public class Stove extends Furniture {
 
     @Override
     public void use(Player player) {
-        // Implementasi Pemain memasak makanan (Panggil Cooking)
         System.out.println("Kamu menggunakan Stove untuk memasak. Pastikan ada fuel dan bahan makanan!");
-        // Tambahkan logic pengecekan fuel dan memasak 
     }
 }

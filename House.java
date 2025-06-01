@@ -115,7 +115,7 @@ public class House {
         }
         System.out.println("\nPosisi Player: (" + playerX + ", " + playerY + ")");
         // System.out.println("Kontrol: W(atas) A(kiri) S(bawah) D(kanan) E(use/interaksi) Q(keluar rumah)");
-        // System.out.println("Legenda: S=SingleBed Q=QueenBed K=KingBed V=Stove T=TV");
+        System.out.println("Legenda: S = SingleBed, Q = QueenBed, K = KingBed, V = Stove, T = TV");
     }
 
     public boolean movePlayer(char direction) {

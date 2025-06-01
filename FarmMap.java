@@ -175,6 +175,8 @@ public class FarmMap {
         }
         
         System.out.println("\nPosisi Player: (" + playerX + ", " + playerY + ")");
+        System.out.println("Legenda: p = Player, h = House, o = Pond, s = Shipping Bin");
+        System.out.println(". = Tillable Land, t = Tilled Land, l = Planted Land");
     }
     
     public boolean movePlayer(char direction) {

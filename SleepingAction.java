@@ -56,9 +56,18 @@ public class SleepingAction extends Action {
             newEnergy = Player.MAX_ENERGY;
         }
         player.setEnergy(newEnergy);
+        
+        boolean passOutDueToLowEnergy = this.isAutomaticSleep && (currentEnergy <= Player.MIN_ENERGY);
+        boolean normalSleep = !this.isAutomaticSleep;
 
-        world.getCurrentTime().nextDay(); 
-        world.handleNewDay();         
+        if (normalSleep || passOutDueToLowEnergy) {
+            // Jika pemain memilih tidur ATAU pingsan karena energi habis:
+            world.getCurrentTime().nextDay(); 
+            world.handleNewDay();         
+        } else {
+            // Jika ini adalah tidur otomatis karna larut malam
+            world.getCurrentTime().setTime(6, 0); // Set jam ke 06:00, menit ke 00, di HARI SAAT INI.
+        }       
     }
 
     @Override
