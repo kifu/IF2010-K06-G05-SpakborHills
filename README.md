@@ -47,9 +47,15 @@ gradle -v
 
 ## Cara Menjalankan
 
-```cmd
-# Masuk ke folder project
+1. Masuk ke folder project
+2. Jalankan aplikasi
 
-# Jalankan aplikasi
-./gradlew.bat :app:run -q --console=plain
+```cmd
+./gradlew build
+```
+
+3. Kemudian run
+
+```cmd
+./gradlew run
 ```
