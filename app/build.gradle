@@ -1,54 +1,25 @@
-// Lokasi file ini: IF2010-K06-G05-SpakborHills/app/build.gradle
 plugins {
-    id 'java'
-    id 'application' // Plugin untuk membuat aplikasi Java yang bisa dijalankan
+    // Pastikan plugin application sudah ada
+    id 'application'
 }
 
-// Repositori tempat Gradle akan mencari dependensi
 repositories {
     mavenCentral()
 }
 
-// Konfigurasi untuk proyek Java
-java {
-    // Menetapkan versi Java untuk kompilasi. Sesuaikan jika perlu.
-    // README Anda menyebutkan JDK 8 atau lebih tinggi.
-    // Gradle 8.14 (dari wrapper Anda) cocok dengan Java 11.
-    sourceCompatibility = JavaVersion.VERSION_11
-    targetCompatibility = JavaVersion.VERSION_11
-}
-
-// Konfigurasi untuk plugin 'application'
 application {
-    // Menentukan kelas utama yang akan dijalankan saat task 'run' dieksekusi.
-    // Ini harus sesuai dengan nama fully qualified dari kelas Main Anda.
-    mainClass = 'org.spakbor.Main'
+    // Tentukan kelas utama yang akan dijalankan
+    mainClassName = 'org.spakbor.Main' // Sesuaikan dengan package dan nama kelas Main.java kamu
 }
 
-// Daftar dependensi yang dibutuhkan oleh proyek Anda
+// ... (konfigurasi lainnya seperti dependencies, repositories, dll.)
+// Contoh dependencies yang mungkin sudah ada:
 dependencies {
-    // Dependensi untuk JUnit 5 (digunakan untuk testing)
-    // Diperlukan karena ada file test seperti PlayerTest.java.
-    testImplementation platform('org.junit:junit-bom:5.10.0') // Bill of Materials untuk JUnit 5
-    testImplementation 'org.junit.jupiter:junit-jupiter-api'    // API inti JUnit 5
-    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine' // Mesin untuk menjalankan tes JUnit 5
-}
-
-// Konfigurasi untuk menjalankan tes
-test {
-    useJUnitPlatform() // Memberitahu Gradle untuk menggunakan JUnit Platform (untuk JUnit 5)
-    testLogging {
-        // Menampilkan log hasil tes (passed, skipped, failed) di konsol
-        events "passed", "skipped", "failed"
-    }
+    implementation 'com.google.guava:guava:32.1.3-jre'
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.9.3'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
 
 run {
-    standardInput = System.in 
-}
-
-task cli(type: JavaExec) {
-    main = 'org.spakbor.Main' // Kelas utama yang akan dijalankan
-    classpath = sourceSets.main.runtimeClasspath
     standardInput = System.in
 }

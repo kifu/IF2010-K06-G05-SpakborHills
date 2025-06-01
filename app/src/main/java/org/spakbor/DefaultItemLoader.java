@@ -99,9 +99,9 @@ public class DefaultItemLoader {
 
 
         // Resep yang bisa dibeli
-        initialItemSet.add(new RecipeItem("Recipe: Fish n' Chips", 50, "Fish n’ Chips"));
+        initialItemSet.add(new RecipeItem("Recipe: Fish n' Chips", 50, "Fish n' Chips"));
         initialItemSet.add(new RecipeItem("Recipe: Fish Sandwich", 100, "Fish Sandwich"));
 
         return new ArrayList<>(initialItemSet);
-    }   
+    }    
 }

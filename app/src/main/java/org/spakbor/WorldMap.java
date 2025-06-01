@@ -1,4 +1,5 @@
 package org.spakbor;
+
 import java.util.*;
 
 public class WorldMap {
@@ -205,9 +206,8 @@ public class WorldMap {
             }
             System.out.println();
         }
-        System.out.println("\nLegenda: F=FarmMap, R=Forest River, M=Mountain Lake, O=Ocean, S=Store Emily");
-        System.out.print(", T=Rumah Mayor Tadi, C=Caroline, P=Perry, D=Dasco, A=Abigail");
-        System.out.println(", .=Kosong, P=Player");
+        System.out.println("\nLegenda: F = FarmMap, R = Forest River, M = Mountain Lake, O = Ocean, S = Store Emily");
+        System.out.println("T = Rumah Mayor Tadi, C = Caroline, P = Perry, D = Dasco, A = Abigail, . = Kosong, P = Player");
         System.out.println("Posisi Player: (" + playerX + ", " + playerY + ")");
     }
 

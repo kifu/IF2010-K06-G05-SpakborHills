@@ -8,12 +8,13 @@ public class QueenBed extends Furniture {
     public QueenBed(WorldState worldState) {
         super("bed_2", "Queen Bed", "Kasur ukuran queen yang mampu ditempati maks 2 orang", 4, 6, 'Q');
         this.worldState = worldState;
+        super.setBuyPrice(price);
     }
 
     @Override
     public void use(Player player) {
         System.out.println("Kamu merebahkan diri di Queen Bed...");
-        new Sleeping(worldState).execute(player);
+        new SleepingAction(player, worldState, false).execute();
     }
 
     public int getMaxPeople() {

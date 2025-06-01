@@ -102,13 +102,11 @@ public class SellingAction extends Action {
         this.calculatedTotalSellValue = getTotalSellPrice(this.itemToSell, this.quantityToSell);
         System.out.println("Item: " + this.itemToSell.getName() + " x" + this.quantityToSell);
         System.out.println("Potensi pendapatan: " + this.calculatedTotalSellValue + "g (akan diterima besok pagi).");
-        // scanner.close(); // Sebaiknya jangan tutup Scanner jika dibuat dari System.in
     }
 
     @Override
     protected void applyEffects() {
         if (this.userCancelled || this.itemToSell == null || this.quantityToSell <= 0) {
-            // Tidak ada efek jika dibatalkan atau item/kuantitas tidak valid dari performAction
             return;
         }
 

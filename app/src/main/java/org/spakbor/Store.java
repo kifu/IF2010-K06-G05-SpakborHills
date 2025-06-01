@@ -7,13 +7,15 @@ import java.util.Scanner;
 // Singleton Store
 public class Store {
     private static Store instance;
-    private final List<Item> items;
+    private final List<Item> itemsForSale;
+    private List<Recipe> allGameRecipes;
 
-    private Store(List<Item> initialItems) {
-        this.items = (initialItems != null) ? new ArrayList<>(initialItems) : new ArrayList<>();
+    private Store(List<Item> initialItems, List<Recipe> gameRecipes) {
+        this.itemsForSale = (initialItems != null) ? new ArrayList<>(initialItems) : new ArrayList<>();
+        this.allGameRecipes = (gameRecipes != null) ? new ArrayList<>(gameRecipes) : new ArrayList<>();
     }
 
-    public static synchronized void initializeInstance(List<Item> initialItems) {
+    public static synchronized void initializeInstance(List<Item> initialItems, List<Recipe> gameRecipes) {
         if (instance != null) {
             System.err.println("Peringatan: Store.initializeInstance() dipanggil lebih dari sekali.");
             return;
@@ -21,7 +23,10 @@ public class Store {
         if (initialItems == null) {
             throw new IllegalArgumentException("Initial items tidak boleh null untuk inisialisasi Store.");
         }
-        instance = new Store(initialItems);
+        if (gameRecipes == null) {
+            throw new IllegalArgumentException("Daftar resep game tidak boleh null untuk inisialisasi Store.");
+        }
+        instance = new Store(initialItems, gameRecipes);
     }
 
     public static Store getInstance() {
@@ -32,12 +37,12 @@ public class Store {
     }
 
     public List<Item> getAllItems() {
-        return new ArrayList<>(items);
+        return new ArrayList<>(itemsForSale);
     }
 
     public List<Item> getItemsForSale() {
         List<Item> forSale = new ArrayList<>();
-        for (Item item : this.items) {
+        for (Item item : this.itemsForSale) {
             if (item.getBuyPrice() != -1) {
                 forSale.add(item);
             }
@@ -47,7 +52,7 @@ public class Store {
 
     public List<Item> getItemsByCategory(String category) {
         List<Item> filteredItems = new ArrayList<>();
-        for (Item item : this.items) {
+        for (Item item : this.itemsForSale) {
             if (item.getCategory().equalsIgnoreCase(category) && item.getBuyPrice() != -1) {
                 filteredItems.add(item);
             }
@@ -56,7 +61,7 @@ public class Store {
     }
 
     public Item findItemByName(String name) {
-        for (Item item : this.items) {
+        for (Item item : this.itemsForSale) {
             if (item.getName().equalsIgnoreCase(name)) {
                 return item;
             }
@@ -84,30 +89,65 @@ public class Store {
         System.out.println("-----------------------------------------------------------------");
     }
 
-    // buyItem dengan itemName, tetapi input menggunakan listIndex
-    public boolean buyItem(Player player, String itemName, int quantity) {
+    public int buyItem(Player player, String itemName, int quantity) {
         if (quantity <= 0) {
             System.out.println("Jumlah pembelian harus lebih dari 0.");
-            return false;
+            return 0; 
         }
 
         Item itemToBuy = findItemByName(itemName);
 
         if (itemToBuy == null) {
             System.out.println("Item dengan nama '" + itemName + "' tidak ditemukan di toko.");
-            return false;
+            return 0;
+        }
+
+        if (itemToBuy instanceof RecipeItem) {
+            RecipeItem recipeItemBeingBought = (RecipeItem) itemToBuy;
+            String recipeNameToUnlock = recipeItemBeingBought.getUnlocksRecipeName();
+
+            if (player.hasRecipe(recipeNameToUnlock)) {
+                System.out.println("Anda sudah memiliki resep '" + recipeNameToUnlock + "'.");
+                return 0;
+            }
+
+            Recipe actualRecipeToUnlock = null;
+            if (this.allGameRecipes != null) {
+                for (Recipe r : this.allGameRecipes) {
+                    if (r.getRecipeName().equalsIgnoreCase(recipeNameToUnlock)) {
+                        actualRecipeToUnlock = r;
+                        break;
+                    }
+                }
+            }
+
+            if (actualRecipeToUnlock == null) {
+                System.out.println("Error internal: Definisi resep untuk '" + recipeNameToUnlock + "' tidak ditemukan.");
+                return 0;
+            }
+
+            int cost = recipeItemBeingBought.getBuyPrice();
+            if (player.getGold() < cost) {
+                System.out.println("Gold tidak cukup untuk membeli resep! Anda memiliki " + player.getGold() + "g, butuh " + cost + "g.");
+                return 0;
+            }
+
+            player.setGold(player.getGold() - cost);
+            player.unlockRecipe(actualRecipeToUnlock); 
+            System.out.println("Berhasil membeli dan membuka resep: " + recipeNameToUnlock + " seharga " + cost + "g.");
+            System.out.println("Sisa gold: " + player.getGold() + "g.");
+            return cost; 
         }
 
         if (itemToBuy.getBuyPrice() == -1) {
             System.out.println("'" + itemToBuy.getName() + "' tidak dapat dibeli.");
-            return false;
+            return 0;
         }
 
-        // Proposal Ring hanya bisa dibeli sekali
         if (itemToBuy.getName().equalsIgnoreCase("Proposal Ring")) {
-            if (player.getInventory().hasItem(itemToBuy)) {
+            if (player.getInventory().hasItem(itemToBuy.getName())) {
                 System.out.println("'" + itemToBuy.getName() + "' sudah ada di inventory Anda dan hanya bisa dimiliki satu.");
-                return false;
+                return 0;
             }
             if (quantity > 1) {
                 System.out.println("'" + itemToBuy.getName() + "' hanya dapat dibeli 1 buah dalam satu waktu.");
@@ -115,28 +155,14 @@ public class Store {
             }
         }
 
-        // Furniture hanya bisa dibeli sekali
-        if (itemToBuy.getName().equalsIgnoreCase("Queen Bed") || itemToBuy.getName().equalsIgnoreCase("King Bed") || itemToBuy.getName().equalsIgnoreCase("Stove")) {
-            if (player.getInventory().hasItem(itemToBuy)) {
-                System.out.println("'" + itemToBuy.getName() + "' sudah ada di inventory Anda dan hanya bisa dimiliki satu.");
-                return false;
+        if (itemToBuy instanceof Furniture) {
+            if (player.hasOwnedFurniture(itemToBuy.getName())) {
+                System.out.println("'" + itemToBuy.getName() + "' sudah Anda miliki dan hanya bisa dibeli satu.");
+                return 0;
             }
             if (quantity > 1) {
                 System.out.println("'" + itemToBuy.getName() + "' hanya dapat dibeli 1 buah dalam satu waktu.");
-                return false;
-            }
-        }
-
-        // Resep item hanya bisa dibeli sekali
-        if (itemToBuy instanceof RecipeItem) {
-            RecipeItem recipeItem = (RecipeItem) itemToBuy;
-            if (player.getInventory().hasItem(itemToBuy)) {
-                System.out.println("Anda sudah memiliki resep '" + recipeItem.getUnlocksRecipeName() + "'.");
-                return false;
-            }
-            if (quantity > 1) {
-                System.out.println("Resep '" + recipeItem.getUnlocksRecipeName() + "' hanya dapat dibeli 1 buah dalam satu waktu.");
-                return false;
+                quantity = 1;
             }
         }
 
@@ -144,74 +170,77 @@ public class Store {
 
         if (player.getGold() < totalCost) {
             System.out.println("Gold tidak cukup! Anda memiliki " + player.getGold() + "g, butuh " + totalCost + "g.");
-            return false;
+            return 0;
         }
 
         player.setGold(player.getGold() - totalCost);
-        player.getInventory().addItem(itemToBuy, quantity);
+
+        if (!(itemToBuy instanceof Furniture) && !(itemToBuy instanceof RecipeItem)) {
+            player.getInventory().addItem(itemToBuy, quantity);
+        }
 
         System.out.println("Berhasil membeli " + quantity + "x " + itemToBuy.getName() + " seharga " + totalCost + "g.");
         System.out.println("Sisa gold: " + player.getGold() + "g.");
-        return true;
+        return totalCost;
     }
 
-    public static void main(String[] args) {
-        // Setup game utama (simulasi)
-        DefaultItemLoader loader = new DefaultItemLoader();
-        List<Item> initialItems = loader.loadInitialItems();
-        Store.initializeInstance(initialItems);
+    // public static void main(String[] args) {
+    //     // Setup game utama (simulasi)
+    //     DefaultItemLoader loader = new DefaultItemLoader();
+    //     List<Item> initialItems = loader.loadInitialItems();
+    //     Store.initializeInstance(initialItems);
 
-        Store toko = Store.getInstance();
-        Player pemain = new Player("PemainNoID", "Male", "KebunTanpaID");
-        pemain.setGold(15000);
+    //     Store toko = Store.getInstance();
+    //     Player pemain = new Player("PemainNoID", "Male", "KebunTanpaID");
+    //     pemain.setGold(15000);
 
-        Scanner scanner = new Scanner(System.in);
-        boolean shopping = true;
+    //     Scanner scanner = new Scanner(System.in);
+    //     boolean shopping = true;
 
-        while(shopping) {
-            System.out.println("\n" + pemain);
-            pemain.getInventory().displayInventory();
-            toko.displayItemsForSale(pemain); // Menampilkan item dengan nomor urut
+    //     while(shopping) {
+    //         System.out.println("\n" + pemain);
+    //         pemain.getInventory().displayInventory();
+    //         toko.displayItemsForSale(pemain); // Menampilkan item dengan nomor urut
 
-            System.out.print("Masukkan nomor item yang ingin dibeli (atau 0 untuk keluar): ");
-            String inputNo = scanner.nextLine();
-            int itemNumber;
-            try {
-                itemNumber = Integer.parseInt(inputNo);
-            } catch (NumberFormatException e) {
-                System.out.println("Input nomor tidak valid.");
-                continue;
-            }
+    //         System.out.print("Masukkan nomor item yang ingin dibeli (atau 0 untuk keluar): ");
+    //         String inputNo = scanner.nextLine();
+    //         int itemNumber;
+    //         try {
+    //             itemNumber = Integer.parseInt(inputNo);
+    //         } catch (NumberFormatException e) {
+    //             System.out.println("Input nomor tidak valid.");
+    //             continue;
+    //         }
 
-            if (itemNumber == 0) {
-                shopping = false;
-                continue;
-            }
+    //         if (itemNumber == 0) {
+    //             shopping = false;
+    //             continue;
+    //         }
 
-            List<Item> itemsForSale = toko.getItemsForSale();
-            if (itemNumber < 1 || itemNumber > itemsForSale.size()) {
-                System.out.println("Nomor item di luar jangkauan.");
-                continue;
-            }
+    //         List<Item> itemsForSale = toko.getItemsForSale();
+    //         if (itemNumber < 1 || itemNumber > itemsForSale.size()) {
+    //             System.out.println("Nomor item di luar jangkauan.");
+    //             continue;
+    //         }
             
-            Item selectedItem = itemsForSale.get(itemNumber - 1); // Dapatkan item berdasarkan nomor
+    //         Item selectedItem = itemsForSale.get(itemNumber - 1); // Dapatkan item berdasarkan nomor
 
-            int quantity = 1; // Default quantity
-            System.out.print("Masukkan jumlah untuk '" + selectedItem.getName() + "': ");
-            String quantityInput = scanner.nextLine();
-            try {
-                quantity = Integer.parseInt(quantityInput);
-            } catch (NumberFormatException e) {
-                System.out.println("Input jumlah tidak valid. Harus berupa angka dan minimal 1!");
-                continue;
-            }
+    //         int quantity = 1; // Default quantity
+    //         System.out.print("Masukkan jumlah untuk '" + selectedItem.getName() + "': ");
+    //         String quantityInput = scanner.nextLine();
+    //         try {
+    //             quantity = Integer.parseInt(quantityInput);
+    //         } catch (NumberFormatException e) {
+    //             System.out.println("Input jumlah tidak valid. Harus berupa angka dan minimal 1!");
+    //             continue;
+    //         }
             
-            toko.buyItem(pemain, selectedItem.getName(), quantity);
-        }
+    //         toko.buyItem(pemain, selectedItem.getName(), quantity);
+    //     }
 
-        System.out.println("\n--- Sesi Belanja Selesai ---");
-        pemain.getInventory().displayInventory();
-        System.out.println("Gold terakhir: " + pemain.getGold() + "g");
-        scanner.close();
-    }
+    //     System.out.println("\n--- Sesi Belanja Selesai ---");
+    //     pemain.getInventory().displayInventory();
+    //     System.out.println("Gold terakhir: " + pemain.getGold() + "g");
+    //     scanner.close();
+    // }
 }
