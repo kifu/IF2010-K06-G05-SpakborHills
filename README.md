@@ -11,18 +11,22 @@ IF2010 - Kelompok K06 G05
 # Instalasi dan Penggunaan Gradle untuk Java di Windows
 
 ## Prasyarat
+
 Pastikan kamu sudah menginstal perangkat berikut:
+
 - Java Development Kit (JDK) versi 8 atau lebih tinggi
 - Gradle (untuk pengelolaan dependensi dan build otomatis)
 
 ### 1. Instalasi Gradle di Windows
 
 #### a. Menggunakan Installer Gradle
+
 1. Kunjungi situs resmi Gradle di [https://gradle.org/install/](https://gradle.org/install/).
 2. Klik **"Windows"** pada bagian **"Manual Installation"** dan unduh file `.zip`.
 3. Ekstrak file `.zip` yang sudah diunduh ke lokasi yang kamu pilih, misalnya `C:\Gradle`.
 
 #### b. Mengonfigurasi Variabel Lingkungan (Environment Variables)
+
 1. Klik kanan pada **This PC** atau **Computer** dan pilih **Properties**.
 2. Pilih **Advanced system settings** di sisi kiri.
 3. Klik tombol **Environment Variables**.
@@ -32,6 +36,20 @@ Pastikan kamu sudah menginstal perangkat berikut:
 5. Pada bagian **System variables**, cari variabel **Path**, lalu klik **Edit** dan tambahkan path ke folder `bin` di dalam direktori Gradle yang baru saja kamu ekstrak. Contoh: `C:\Gradle\gradle-x.y.z\bin`.
 
 #### c. Verifikasi Instalasi Gradle
+
 Untuk memastikan Gradle terinstal dengan benar, buka **Command Prompt** dan jalankan perintah berikut:
+
 ```bash
 gradle -v
+```
+
+# Panduan Menjalankan Game Spakbor Hills
+
+## Cara Menjalankan
+
+```cmd
+# Masuk ke folder project
+
+# Jalankan aplikasi
+./gradlew.bat :app:run -q --console=plain
+```
