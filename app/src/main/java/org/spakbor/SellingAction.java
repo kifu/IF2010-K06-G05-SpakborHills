@@ -1,3 +1,5 @@
+package org.spakbor;
+
 import java.util.Scanner; 
 
 public class SellingAction extends Action {

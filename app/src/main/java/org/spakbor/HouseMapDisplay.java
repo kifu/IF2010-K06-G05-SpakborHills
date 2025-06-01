@@ -1,3 +1,5 @@
+package org.spakbor;
+
 public class HouseMapDisplay {
     private static final int MAP_SIZE = 24;
     private static final char EMPTY = '.';

@@ -1,3 +1,4 @@
+package org.spakbor;
 import java.util.Random;
 
 public class WorldState {

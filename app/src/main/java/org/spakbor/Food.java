@@ -1,3 +1,5 @@
+package org.spakbor;
+
 public class Food extends Item implements Edible {
     private int energyValue;
 

@@ -1,3 +1,5 @@
+package org.spakbor;
+
 public class MarryingAction extends Action {
     private static final int ENERGY_COST = 80;
     private static final int MARRIAGE_HOUR = 22;

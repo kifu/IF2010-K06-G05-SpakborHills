@@ -1,3 +1,5 @@
+package org.spakbor;
+
 import java.util.Scanner;
 import java.util.Random;
 

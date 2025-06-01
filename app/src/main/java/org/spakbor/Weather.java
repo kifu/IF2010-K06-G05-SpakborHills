@@ -1,3 +1,5 @@
+package org.spakbor;
+
 public enum Weather {
     SUNNY("Sunny"),
     RAINY("Rainy");

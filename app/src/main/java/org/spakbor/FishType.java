@@ -1,3 +1,5 @@
+package org.spakbor;
+
 public enum FishType {
     COMMON("Common", 10),
     REGULAR("Regular", 5),

@@ -1,3 +1,5 @@
+package org.spakbor;
+
 public class MenuGame {
     public static void printSpakborHillsArt() {
         System.out.println("╔═══════════════════════════════════════════════════════════════════════════════════════════════════╗");

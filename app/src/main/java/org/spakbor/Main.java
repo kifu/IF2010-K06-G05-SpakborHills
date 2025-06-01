@@ -1,5 +1,8 @@
+package org.spakbor;
+
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Scanner;
 import java.util.InputMismatchException;
 import java.util.Timer;
@@ -30,14 +33,21 @@ public class Main {
     private static void showMainMenu() {
         while (gameRunning) {
             if (player == null) {
-                MenuGame.showMenuUnstarted();
+                MenuGame.showMenuUnstarted(); // Ini mencetak menu dan prompt "Pilih aksi (1-4): "
             } else {
-                MenuGame.showMenuStarted();
+                MenuGame.showMenuStarted(); // Ini juga akan mencetak menu dan prompt
             }
 
+            System.out.flush(); // << TAMBAHKAN BARIS INI UNTUK MEMASTIKAN PROMPT TERCETAK
+
             try {
-                int choice = scanner.nextInt();
-                scanner.nextLine(); 
+                // Baris 42 Anda (sebelumnya) adalah yang di bawah ini:
+                String inputLine = scanner.nextLine().trim(); 
+                if (inputLine.isEmpty()) {
+                    System.out.println("Input tidak boleh kosong. Silakan coba lagi.");
+                    continue; 
+                }
+                int choice = Integer.parseInt(inputLine);
 
                 if (player == null) {
                     handleMenuUnstarted(choice);
@@ -45,8 +55,15 @@ public class Main {
                     handleMenuStarted(choice);
                 }
             } catch (InputMismatchException e) {
-                System.out.println("Input tidak valid. Harap masukkan angka.");
-                scanner.nextLine();
+                System.out.println("Input tidak valid. Harap masukkan pilihan berupa angka.");
+            } catch (NumberFormatException e) { 
+                System.out.println("Input tidak valid. Harap masukkan angka yang benar.");
+            } catch (NoSuchElementException e) { // Menangkap error spesifik jika terjadi lagi
+                System.err.println("Error membaca input: " + e.getMessage());
+                System.err.println("Pastikan Anda mengetik input dan menekan Enter.");
+                // Anda bisa memilih untuk menghentikan game atau mencoba lagi,
+                // tapi untuk sekarang kita coba lihat apakah pesan ini muncul.
+                gameRunning = false; // Contoh: hentikan game jika ini terjadi
             }
         }
         System.out.println("Terima kasih telah bermain Spakbor Hills! Sampai jumpa lagi!");

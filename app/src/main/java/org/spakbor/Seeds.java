@@ -1,3 +1,5 @@
+package org.spakbor;
+
 public class Seeds extends Item{
     // atribut
     private Season seedsSeason;

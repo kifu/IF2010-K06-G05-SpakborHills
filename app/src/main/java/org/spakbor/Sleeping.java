@@ -1,3 +1,5 @@
+package org.spakbor;
+
 public class Sleeping {
     private WorldState worldState;
 

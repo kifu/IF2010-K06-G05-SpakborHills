@@ -1,40 +1,54 @@
-// File: IF2010-K06-G05-SpakborHills/app/build.gradle
+// Lokasi file ini: IF2010-K06-G05-SpakborHills/app/build.gradle
 plugins {
     id 'java'
-    id 'application' // Plugin untuk aplikasi Java
+    id 'application' // Plugin untuk membuat aplikasi Java yang bisa dijalankan
 }
 
-// Repositori untuk dependensi
+// Repositori tempat Gradle akan mencari dependensi
 repositories {
     mavenCentral()
 }
 
-// Konfigurasi Java
+// Konfigurasi untuk proyek Java
 java {
-    // Sesuaikan versi Java jika perlu, minimal JDK 8
+    // Menetapkan versi Java untuk kompilasi. Sesuaikan jika perlu.
+    // README Anda menyebutkan JDK 8 atau lebih tinggi.
+    // Gradle 8.14 (dari wrapper Anda) cocok dengan Java 11.
     sourceCompatibility = JavaVersion.VERSION_11
     targetCompatibility = JavaVersion.VERSION_11
 }
 
-// Konfigurasi aplikasi
+// Konfigurasi untuk plugin 'application'
 application {
-    // Kelas utama yang akan dijalankan
+    // Menentukan kelas utama yang akan dijalankan saat task 'run' dieksekusi.
+    // Ini harus sesuai dengan nama fully qualified dari kelas Main Anda.
     mainClass = 'org.spakbor.Main'
 }
 
-// Dependensi yang dibutuhkan
+// Daftar dependensi yang dibutuhkan oleh proyek Anda
 dependencies {
-    // JUnit 5 untuk testing
-    testImplementation platform('org.junit:junit-bom:5.10.0')
-    testImplementation 'org.junit.jupiter:junit-jupiter-api'
-    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine'
+    // Dependensi untuk JUnit 5 (digunakan untuk testing)
+    // Diperlukan karena ada file test seperti PlayerTest.java.
+    testImplementation platform('org.junit:junit-bom:5.10.0') // Bill of Materials untuk JUnit 5
+    testImplementation 'org.junit.jupiter:junit-jupiter-api'    // API inti JUnit 5
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine' // Mesin untuk menjalankan tes JUnit 5
 }
 
-// Konfigurasi untuk menjalankan test
+// Konfigurasi untuk menjalankan tes
 test {
-    useJUnitPlatform() // Menggunakan JUnit Platform (untuk JUnit 5)
+    useJUnitPlatform() // Memberitahu Gradle untuk menggunakan JUnit Platform (untuk JUnit 5)
     testLogging {
-        // Menampilkan hasil tes di konsol
+        // Menampilkan log hasil tes (passed, skipped, failed) di konsol
         events "passed", "skipped", "failed"
     }
+}
+
+run {
+    standardInput = System.in 
+}
+
+task cli(type: JavaExec) {
+    main = 'org.spakbor.Main' // Kelas utama yang akan dijalankan
+    classpath = sourceSets.main.runtimeClasspath
+    standardInput = System.in
 }

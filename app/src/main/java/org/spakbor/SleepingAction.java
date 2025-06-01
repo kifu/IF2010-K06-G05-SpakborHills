@@ -1,3 +1,5 @@
+package org.spakbor;
+
 // SleepingAction.java
 
 public class SleepingAction extends Action {

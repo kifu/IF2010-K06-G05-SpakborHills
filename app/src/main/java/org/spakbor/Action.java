@@ -1,3 +1,5 @@
+package org.spakbor;
+
 // Template Method Action
 
 public abstract class Action {

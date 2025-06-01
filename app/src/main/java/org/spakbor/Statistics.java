@@ -1,3 +1,5 @@
+package org.spakbor;
+
 import java.util.HashMap;
 import java.util.Map;
 

@@ -1,3 +1,5 @@
+package org.spakbor;
+
 // EatingAction.java
 
 public class EatingAction extends Action {

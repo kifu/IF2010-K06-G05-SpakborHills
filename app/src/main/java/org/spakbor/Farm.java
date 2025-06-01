@@ -1,3 +1,5 @@
+package org.spakbor;
+
 public class Farm {
     private String name;
     private Player player;

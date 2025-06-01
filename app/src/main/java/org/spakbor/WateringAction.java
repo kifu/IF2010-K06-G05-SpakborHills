@@ -1,3 +1,5 @@
+package org.spakbor;
+
 public class WateringAction extends Action {
     public static final int ENERGY_COST = 5; 
     public static final int TIME_COST_MINUTES = 5; 

@@ -1,3 +1,5 @@
+package org.spakbor;
+
 public class Tile{
     private TileType type;
     private boolean isWatered;

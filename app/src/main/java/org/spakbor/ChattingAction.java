@@ -1,3 +1,5 @@
+package org.spakbor;
+
 public class ChattingAction extends Action {
 
     private static final int ENERGY_COST = 10;

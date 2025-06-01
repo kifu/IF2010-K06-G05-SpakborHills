@@ -1,3 +1,5 @@
+package org.spakbor;
+
 public class QueenBed extends Furniture {
     private final int maxPeople = 2;
     private final int price = 10000;

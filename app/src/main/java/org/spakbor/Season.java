@@ -1,3 +1,5 @@
+package org.spakbor;
+
 public enum Season {
     SPRING("Spring"),
     SUMMER("Summer"),

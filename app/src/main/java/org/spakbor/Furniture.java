@@ -1,3 +1,5 @@
+package org.spakbor;
+
 import java.util.List;
 import java.util.Objects;
 

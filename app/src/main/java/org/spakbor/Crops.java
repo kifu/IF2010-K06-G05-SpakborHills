@@ -1,3 +1,5 @@
+package org.spakbor;
+
 public class Crops extends Item implements Edible {
     private int cropPerHarvest;
     public Crops(String name, int BuyPrice, int SellPrice, int cropPerHarvest){

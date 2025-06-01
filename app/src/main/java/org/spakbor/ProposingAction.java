@@ -1,3 +1,5 @@
+package org.spakbor;
+
 // ProposingAction.java (Modifikasi)
 
 public class ProposingAction extends Action {

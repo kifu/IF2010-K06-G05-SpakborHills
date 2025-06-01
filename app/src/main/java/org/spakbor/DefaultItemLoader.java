@@ -1,3 +1,5 @@
+package org.spakbor;
+
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -101,5 +103,5 @@ public class DefaultItemLoader {
         initialItemSet.add(new RecipeItem("Recipe: Fish Sandwich", 100, "Fish Sandwich"));
 
         return new ArrayList<>(initialItemSet);
-    }      
+    }   
 }

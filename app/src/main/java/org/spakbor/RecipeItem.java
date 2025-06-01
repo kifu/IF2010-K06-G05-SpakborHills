@@ -1,3 +1,5 @@
+package org.spakbor;
+
 // Ini adalah recipe item yang akan dijual di toko.
 public class RecipeItem extends Item {
     // Menyimpan nama resep yang akan di-unlock oleh item ini.

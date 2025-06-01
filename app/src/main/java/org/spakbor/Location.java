@@ -1,3 +1,5 @@
+package org.spakbor;
+
 public class Location {
     private String name;
 

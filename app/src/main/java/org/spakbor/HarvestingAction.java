@@ -1,3 +1,5 @@
+package org.spakbor;
+
 import java.util.List;
 
 public class HarvestingAction extends Action {

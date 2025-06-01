@@ -1,3 +1,5 @@
+package org.spakbor;
+
 public class WatchingAction extends Action {
     private static final int ENERGY_COST = 5;
     private static final int TIME_COST_MINUTES = 15;

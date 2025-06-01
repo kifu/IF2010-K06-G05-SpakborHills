@@ -1,3 +1,5 @@
+package org.spakbor;
+
 public class Television extends Furniture {
     private WorldState worldState;
 

@@ -1,3 +1,5 @@
+package org.spakbor;
+
 public class Stove extends Furniture {
     public Stove() {
         super("stove", "Stove", "Tungku untuk memasak makanan\nMaks makanan yang bisa dimasak hanya satu.\nPerlu fuel untuk menyalakannya.", 1, 1, 'V');

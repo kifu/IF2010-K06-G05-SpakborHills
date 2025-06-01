@@ -1,3 +1,5 @@
+package org.spakbor;
+
 public class Fish extends Item implements Edible {
     private FishType fishType;
     

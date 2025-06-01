@@ -1,2 +1,3 @@
-rootProject.name = 'IF2010-K06-G05-SpakborHills'
-include 'app'
+// File: IF2010-K06-G05-SpakborHills/settings.gradle
+rootProject.name = 'SpakborHillsProject' // Nama proyek root Anda, bisa diganti
+include 'app' // Menyatakan bahwa 'app' adalah sebuah modul (subproject)

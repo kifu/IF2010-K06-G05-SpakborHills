@@ -1,3 +1,5 @@
+package org.spakbor;
+
 public class RecoverLandAction extends Action {
     public static final int ENERGY_COST = 5; // Sesuai RecoverLand.java lama
     public static final int TIME_COST_MINUTES = 5; // Sesuai RecoverLand.java lama

@@ -1,3 +1,5 @@
+package org.spakbor;
+
 public class RelationshipInfo {
     private String name;
     private int heartPoint;

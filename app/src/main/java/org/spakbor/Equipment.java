@@ -1,3 +1,5 @@
+package org.spakbor;
+
 public class Equipment extends Item {
     public Equipment(String name) {
         super("Equipment", name, -1, -1);

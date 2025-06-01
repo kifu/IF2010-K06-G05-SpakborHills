@@ -1,3 +1,5 @@
+package org.spakbor;
+
 public enum HouseLayoutType {
     DEFAULT,         // SingleBed + TV
     WITH_STOVE,      // SingleBed + TV + Stove

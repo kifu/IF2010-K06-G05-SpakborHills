@@ -1,3 +1,5 @@
+package org.spakbor;
+
 public class SingleBed extends Furniture {
     private final int maxPeople = 1;
     private WorldState worldState;

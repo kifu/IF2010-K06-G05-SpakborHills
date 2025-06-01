@@ -1,3 +1,4 @@
+package org.spakbor;
 
 public enum RelationshipStatus {
     SINGLE,
