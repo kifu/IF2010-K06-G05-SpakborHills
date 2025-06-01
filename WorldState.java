@@ -8,17 +8,23 @@ public class WorldState {
     private Time currentTime;
     private Season currentSeason;
     private Weather currentWeather;
+    private Player player; 
+    private ShippingBin<Item> shippingBin; 
+    private Tile[][] farmTiles;
 
     private int dayInSeasonCounter; // Counter untuk menghitung hari dalam satu musim (1 sampai DAYS_PER_SEASON)
     private int rainyDaysThisSeasonCounter; // Counter untuk menghitung hari hujan dalam satu musim
     private Random random;
 
-    public WorldState() {
+    public WorldState(Player player, ShippingBin<Item> shippingBin, Tile[][] tiles) {
         this.currentTime = new Time(1, 6, 0); // Mulai dari hari 1, jam 6:00
         this.currentSeason = Season.SPRING; // Musim awal adalah musim semi
         this.dayInSeasonCounter = 1;
         this.rainyDaysThisSeasonCounter = 0;
         this.random = new Random();
+        this.player = player;
+        this.shippingBin = shippingBin;
+        this.farmTiles = tiles;
         determineInitialWeather();
     }
 
@@ -52,6 +58,33 @@ public class WorldState {
         System.out.println("------------------------------------");
         System.out.println("Hari baru dimulai! : Day " + currentTime.getDay());
         dayInSeasonCounter++;
+
+        if (farmTiles != null) {
+            for (int i = 0; i < farmTiles.length; i++) {
+                for (int j = 0; j < farmTiles[i].length; j++) {
+                    Tile tile = farmTiles[i][j];
+                    // Tanaman hanya tumbuh jika ditanam DAN sudah disiram
+                    if (tile.getType() == Tile.TileType.Planted && tile.getPlanted() != null) {
+                        if (tile.isWatered()) {
+                            tile.incrementDays();
+                        }
+                        // Tanah menjadi kering keesokan harinya (akan disiram lagi oleh hujan/pemain)
+                        tile.setIsWatered(false);
+                    }
+                }
+            }
+        }
+
+        if (this.shippingBin != null && this.player != null) {
+            this.shippingBin.processEndOfDaySale();
+            int goldFromSales = this.shippingBin.claimPendingGold();
+            if (goldFromSales > 0) {
+                this.player.addGold(goldFromSales);
+                System.out.println("Pemberitahuan: Kamu menerima " + goldFromSales + "g dari penjualan kemarin.");
+            }
+        } else {
+            System.out.println("DEBUG: GAGAL! Objek player atau shippingBin di WorldState adalah null.");
+        }
 
         if (dayInSeasonCounter > DAYS_PER_SEASON) {
             changeSeason();
@@ -106,6 +139,16 @@ public class WorldState {
     public void applyWeatherEffects() {
         if (currentWeather == Weather.RAINY) {
             System.out.println("Hujan nih. Semua tanah yang bisa ditanamin, yang udah dibajak, sama yang udah ditanami sekarang basah semua. Jadi, nggak usah nyiram hari ini.");
+            if (farmTiles != null) {
+                for (int i = 0; i < farmTiles.length; i++) {
+                    for (int j = 0; j < farmTiles[i].length; j++) {
+                        Tile tile = farmTiles[i][j];
+                        if (tile.getType() == Tile.TileType.Tilled || tile.getType() == Tile.TileType.Planted) {
+                            tile.setIsWatered(true);
+                        }
+                    }
+                }
+            }
         } else if (currentWeather == Weather.SUNNY) {
             System.out.println("Cerah nih. Ingat buat nyiram tanaman kalau perlu.");
         }

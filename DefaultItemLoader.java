@@ -101,5 +101,5 @@ public class DefaultItemLoader {
         initialItemSet.add(new RecipeItem("Recipe: Fish Sandwich", 100, "Fish Sandwich"));
 
         return new ArrayList<>(initialItemSet);
-    }      
+    }    
 }

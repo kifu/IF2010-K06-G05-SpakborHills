@@ -18,12 +18,12 @@ public abstract class Furniture extends Item {
         if (sizeX <= 0 || sizeY <= 0) {
             throw new IllegalArgumentException("Furniture size must be greater than zero.");
         }
+        super.setBuyPrice(price);
         this.id = id;
         this.description = description;
         this.sizeX = sizeX;
         this.sizeY = sizeY;
         this.logo = logo;
-        this.price = 0;
         this.x = -1; // posisi default belum diletakkan
         this.y = -1;
     }

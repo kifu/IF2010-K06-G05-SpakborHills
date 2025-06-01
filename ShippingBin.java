@@ -76,6 +76,10 @@ public class ShippingBin<T extends Item> {
         System.out.println("------------------------------------------------------\n");
     }
 
+    public int getPendingGold() {
+        return this.pendingGold;
+    }
+
     // Mengambil gold yang tertunda dari penjualan kemarin dan mereset status harian bin.
     public int claimPendingGold() {
         int goldCollected = pendingGold;

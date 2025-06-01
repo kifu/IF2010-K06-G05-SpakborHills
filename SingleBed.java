@@ -9,8 +9,8 @@ public class SingleBed extends Furniture {
 
     @Override
     public void use(Player player) {
-        System.out.println("Kamu merebahkan diri di Single Bed...");
-        new Sleeping(worldState).execute(player);
+        System.out.println("Kamu merebahkan diri di Single Bed..."); 
+        new SleepingAction(player, worldState, false).execute();
     }
 
     public int getMaxPeople() {

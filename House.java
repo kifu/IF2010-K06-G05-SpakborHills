@@ -185,62 +185,62 @@ public class House {
     //     }
     // }
     // Test Main
-    public static void main(String[] args) {
-        // --- Pilihan layout ---
-        Scanner scanner = new Scanner(System.in);
-        System.out.println("Pilih layout House yang ingin kamu mainkan:");
-        System.out.println("1. Default (SingleBed + TV)");
-        System.out.println("2. SingleBed + TV + Stove");
-        System.out.println("3. SingleBed + TV + Queen Bed");
-        System.out.println("4. SingleBed + TV + King Bed");
-        System.out.println("5. SingleBed + TV + Stove + Queen Bed");
-        System.out.println("6. SingleBed + TV + Stove + King Bed");
-        System.out.println("7. SingleBed + TV + Queen Bed + King Bed");
-        System.out.println("8. Semua furniture (ALL)");
+    // public static void main(String[] args) {
+    //     // --- Pilihan layout ---
+    //     Scanner scanner = new Scanner(System.in);
+    //     System.out.println("Pilih layout House yang ingin kamu mainkan:");
+    //     System.out.println("1. Default (SingleBed + TV)");
+    //     System.out.println("2. SingleBed + TV + Stove");
+    //     System.out.println("3. SingleBed + TV + Queen Bed");
+    //     System.out.println("4. SingleBed + TV + King Bed");
+    //     System.out.println("5. SingleBed + TV + Stove + Queen Bed");
+    //     System.out.println("6. SingleBed + TV + Stove + King Bed");
+    //     System.out.println("7. SingleBed + TV + Queen Bed + King Bed");
+    //     System.out.println("8. Semua furniture (ALL)");
 
-        int pilihan = 1;
-        try {
-            System.out.print("> ");
-            pilihan = Integer.parseInt(scanner.nextLine().trim());
-        } catch (Exception ignored) {}
+    //     int pilihan = 1;
+    //     try {
+    //         System.out.print("> ");
+    //         pilihan = Integer.parseInt(scanner.nextLine().trim());
+    //     } catch (Exception ignored) {}
 
-        HouseLayoutType type = HouseLayoutType.DEFAULT;
-        switch (pilihan) {
-            case 2: type = HouseLayoutType.WITH_STOVE; break;
-            case 3: type = HouseLayoutType.WITH_QUEEN; break;
-            case 4: type = HouseLayoutType.WITH_KING; break;
-            case 5: type = HouseLayoutType.STOVE_QUEEN; break;
-            case 6: type = HouseLayoutType.STOVE_KING; break;
-            case 7: type = HouseLayoutType.QUEEN_KING; break;
-            case 8: type = HouseLayoutType.ALL; break;
-            default: type = HouseLayoutType.DEFAULT; break;
-        }
+    //     HouseLayoutType type = HouseLayoutType.DEFAULT;
+    //     switch (pilihan) {
+    //         case 2: type = HouseLayoutType.WITH_STOVE; break;
+    //         case 3: type = HouseLayoutType.WITH_QUEEN; break;
+    //         case 4: type = HouseLayoutType.WITH_KING; break;
+    //         case 5: type = HouseLayoutType.STOVE_QUEEN; break;
+    //         case 6: type = HouseLayoutType.STOVE_KING; break;
+    //         case 7: type = HouseLayoutType.QUEEN_KING; break;
+    //         case 8: type = HouseLayoutType.ALL; break;
+    //         default: type = HouseLayoutType.DEFAULT; break;
+    //     }
 
-        WorldState worldState = new WorldState();
-        Time time = new Time(3, 3, 3);
-        House house = new House(worldState, time, type);
-        Player player = new Player("Asep Spakbor", "Male", "FarmDuls");
+    //     WorldState worldState = new WorldState();
+    //     Time time = new Time(3, 3, 3);
+    //     House house = new House(worldState, time, type);
+    //     Player player = new Player("Asep Spakbor", "Male", "FarmDuls");
 
-        System.out.println("=== SELAMAT DATANG DI RUMAH ASEP SPAKBOR ===");
-        while (true) {
-            house.displayMap();
-            System.out.print("\nMasukkan perintah: ");
-            String input = scanner.nextLine().trim();
-            if (input.isEmpty()) continue;
-            char command = Character.toLowerCase(input.charAt(0));
-            switch (command) {
-                case 'w': case 'a': case 's': case 'd':
-                    if (!house.movePlayer(command)) {
-                        System.out.println("Tidak bisa bergerak ke arah tersebut!");
-                    }
-                    break;
-                case 'e': house.use(player); break;
-                case 'q':
-                    System.out.println("Keluar dari rumah...");
-                    return;
-                default:
-                    System.out.println("Perintah tidak dikenal!");
-            }
-        }
-    }
+    //     System.out.println("=== SELAMAT DATANG DI RUMAH ASEP SPAKBOR ===");
+    //     while (true) {
+    //         house.displayMap();
+    //         System.out.print("\nMasukkan perintah: ");
+    //         String input = scanner.nextLine().trim();
+    //         if (input.isEmpty()) continue;
+    //         char command = Character.toLowerCase(input.charAt(0));
+    //         switch (command) {
+    //             case 'w': case 'a': case 's': case 'd':
+    //                 if (!house.movePlayer(command)) {
+    //                     System.out.println("Tidak bisa bergerak ke arah tersebut!");
+    //                 }
+    //                 break;
+    //             case 'e': house.use(player); break;
+    //             case 'q':
+    //                 System.out.println("Keluar dari rumah...");
+    //                 return;
+    //             default:
+    //                 System.out.println("Perintah tidak dikenal!");
+    //         }
+    //     }
+    // }
 }

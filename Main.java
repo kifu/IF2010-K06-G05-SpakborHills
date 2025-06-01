@@ -15,6 +15,7 @@ public class Main {
     private static Store store;
     private static List<NPC> npcs;
     private static List<Item> allItems;
+    private static Tile[][] tiles;
     private static List<Recipe> allRecipes;
     private static Statistics statistics;
     private static boolean gameRunning = true;
@@ -95,7 +96,6 @@ public class Main {
         System.out.println("\n=====================================================");
         System.out.println("|               Mulai Petualangan Baru              |");
         System.out.println("=====================================================");
-        worldState = new WorldState();
         System.out.print("Masukkan Nama Karakter: ");
         String playerName = scanner.nextLine();
         System.out.print("Pilih Gender (Pria/Wanita): ");
@@ -107,6 +107,7 @@ public class Main {
         System.out.print("Masukkan Nama Ladangmu: ");
         String farmName = scanner.nextLine() + " Farm";
         player = new Player(playerName, playerGender, farmName);
+        shippingBin = new ShippingBin<>();
         DefaultItemLoader itemLoader = new DefaultItemLoader();
         allItems = itemLoader.loadInitialItems();
         DefaultRecipeLoader recipeLoader = new DefaultRecipeLoader();
@@ -117,11 +118,18 @@ public class Main {
         player.getInventory().addItem(Item.findItemByName(allItems, "Pickaxe"), 1);
         player.getInventory().addItem(Item.findItemByName(allItems, "Fishing Rod"), 1);
         farmMap = new FarmMap();
+        int mapSize = 32; // Sesuaikan dengan MAP_SIZE di FarmMap.java
+        tiles = new Tile[mapSize][mapSize];
+        for (int i = 0; i < mapSize; i++) {
+            for (int j = 0; j < mapSize; j++) {
+                tiles[i][j] = new Tile();
+            }
+        }
+        worldState = new WorldState(player, shippingBin, tiles);
         worldMap = new WorldMap();
         house = new House(worldState, worldState.getCurrentTime(), HouseLayoutType.DEFAULT);
         Store.initializeInstance(allItems);
         store = Store.getInstance();
-        shippingBin = new ShippingBin<>();
         npcs = new ArrayList<>();
         npcs.add(NPCFactory.createMayorTadi(allItems));
         npcs.add(NPCFactory.createCaroline(allItems));
@@ -207,6 +215,8 @@ public class Main {
         System.out.println("\n--- Keuangan ---");
         System.out.println("Total Pemasukan: " + statistics.getTotalIncome() + "g");
         System.out.println("Total Pengeluaran: " + statistics.getTotalExpenditure() + "g");
+        System.out.println("Total Rata-Rata Pemasukan Dalam 1 Musim: " + statistics.getAverageSeasonIncome() + "g");
+        System.out.println("Total Rata-Rata Pengeluaran Dalam 1 Musim: " + statistics.getAverageSeasonExpenditure() + "g");
         System.out.println("\n--- Prestasi Ladang ---");
         System.out.println("Total Tanaman Dipanen: " + statistics.getCropsHarvested());
         Statistics.FishCaughtDetails fishStats = statistics.getFishCaught();
@@ -214,19 +224,25 @@ public class Main {
         System.out.println("  - Common: " + fishStats.getCommon() + ", Regular: " + fishStats.getRegular() + ", Legendary: " + fishStats.getLegendary());
         System.out.println("\n--- Sosial (Status NPC) ---");
         for (NPC npc : npcs) {
-            System.out.println("- " + npc.getName() + ": " + npc.getHeartPoint() + "/150 HP (" + npc.getRelationshipStatus() + ")");
+            System.out.println("-----------------------------------------------------");
+            System.out.println("- Nama: " + npc.getName());
+            System.out.println("  Status Hubungan: " + npc.getHeartPoint() + "/150 HP (" + npc.getRelationshipStatus() + ")");
+            System.out.println("  Frekuensi Interaksi:");
+            System.out.println("    - Chatting: " + npc.getChattingCount() + " kali");
+            System.out.println("    - Gifting: " + npc.getGiftingCount() + " kali");
+            System.out.println("    - Visiting: " + npc.getVisitingCount() + " kali");
         }
+        System.out.println("-----------------------------------------------------");
     }
 
     private static void showActionsMenu() {
         boolean inActionMenu = true;
         while (inActionMenu) {
-            System.out.println("\n==================================================================");
-            // DIPERBARUI: Menggunakan synchronized untuk keamanan thread
+            System.out.println("\n============================================================================================");
             synchronized (worldState) {
-                System.out.println("| " + player.getLocation() + " | " + worldState.getCurrentStatus());
+                System.out.println("| " + worldState.getCurrentStatus() + " | Gold: " + player.getGold() + " | Energy: " + player.getEnergy() + " | ");
             }
-            System.out.println("==================================================================");
+            System.out.println("============================================================================================");
             
             String adjacentObjectOnFarm = null;
 
@@ -236,7 +252,7 @@ public class Main {
                 if (farmMap.canVisit()) {
                     System.out.print("Kamu berada di jalan keluar. Pergi ke Peta Dunia? (y/n): ");
                     if (scanner.nextLine().trim().equalsIgnoreCase("y")) {
-                        new VisitingAction(player, worldState, "World Map").execute();
+                        new VisitingAction(player, worldState, "WorldMap", npcs).execute();
                         continue;
                     }
                 }
@@ -245,23 +261,28 @@ public class Main {
                 if (house.isPlayerAtExit()) {
                     System.out.print("Kamu berada di pintu keluar. Keluar dari rumah? (y/n): ");
                     if (scanner.nextLine().trim().equalsIgnoreCase("y")) {
-                        new VisitingAction(player, worldState, player.getFarmName()).execute();
+                        new VisitingAction(player, worldState, player.getFarmName(), npcs).execute();
                         continue;
                     }
                 }
-            } else if (player.getLocation().equals("World Map")) {
-                handleWorldMapInteraction();
-                continue;
+            } else if (player.getLocation().equals("WorldMap")) {
+                boolean keepInActionMenu = handleWorldMapInteraction();
+                if (!keepInActionMenu) {
+                    inActionMenu = false; 
+                }
+                continue; 
             } else {
                  System.out.println("Kamu sedang berada di " + player.getLocation() + ".");
             }
 
+            System.out.println("\n--- Kontrol ---");
+            System.out.println("-> Gerak: Langsung ketik W/A/S/D lalu Enter");
             System.out.println("\n--- Aksi Tersedia ---");
-            System.out.println("1.  Gerak (W/A/S/D) (Hanya di Ladang/Rumah)");
-            System.out.println("2.  Interaksi / Lakukan Aksi Sesuai Lokasi");
-            System.out.println("3.  Makan Item dari Inventory");
-            System.out.println("4.  Tidur (hanya di rumah)");
-            System.out.println("5.  Kembali ke Menu Utama");
+            System.out.println("1. Interaksi / Lakukan Aksi Sesuai Lokasi");
+            System.out.println("2. Tampilkan Lokasi Saat Ini");
+            System.out.println("3. Tampilkan Inventory");
+            System.out.println("4. Makan Item dari Inventory");
+            System.out.println("5. Kembali ke Menu Utama");
 
             if (isSubLocation(player.getLocation())) {
                 System.out.println("6. Keluar ke Peta Dunia");
@@ -269,57 +290,67 @@ public class Main {
             if (adjacentObjectOnFarm != null) {
                 System.out.println("7. Interaksi dengan " + adjacentObjectOnFarm);
             }
-            System.out.print("Pilih aksi: ");
+            System.out.print("Pilih Aksi (angka) atau Gerak (W/A/S/D): ");
 
             try {
-                int choice = scanner.nextInt();
-                scanner.nextLine();
+                String input = scanner.nextLine().trim().toLowerCase();
+                if (input.isEmpty()) {
+                    continue; // Jika input kosong, ulangi loop
+                }
 
-                switch (choice) {
-                    case 1:
-                        System.out.print("Masukkan arah (W/A/S/D): ");
-                        char direction = scanner.nextLine().trim().toLowerCase().charAt(0);
-                        if (player.getLocation().equals(player.getFarmName())) {
-                            farmMap.movePlayer(direction);
-                        } else if (player.getLocation().equals("House")) {
-                            house.movePlayer(direction);
-                        } else {
-                            System.out.println("Kamu tidak bisa bergerak secara spesifik di lokasi ini.");
-                        }
-                        break;
-                    case 2:
-                        handleInteraction();
-                        break;
-                    case 3:
-                        handleEating();
-                        break;
-                    case 4:
-                        new SleepingAction(player, worldState, false).execute();
-                        break;
-                    case 5:
-                        inActionMenu = false;
-                        break;
-                    case 6:
-                        if (isSubLocation(player.getLocation())) {
-                            new VisitingAction(player, worldState, "World Map").execute();
-                        } else {
+                char command = input.charAt(0);
+
+                // Cek apakah perintah adalah untuk bergerak
+                if (input.length() == 1 && (command == 'w' || command == 'a' || command == 's' || command == 'd')) {
+                    if (player.getLocation().equals(player.getFarmName())) {
+                        farmMap.movePlayer(command);
+                    } else if (player.getLocation().equals("House")) {
+                        house.movePlayer(command);
+                    } else {
+                        System.out.println("Kamu tidak bisa bergerak bebas di lokasi ini. Gunakan menu.");
+                    }
+                } else {
+                    // Jika bukan perintah gerak, coba proses sebagai angka aksi
+                    int choice = Integer.parseInt(input);
+                    switch (choice) {
+                        case 1:
+                            handleInteraction();
+                            break;
+                        case 2:
+                            System.out.println("\nLokasi Saat Ini: " + player.getLocation());
+                            break;
+                        case 3:
+                            System.out.println("\n--- Inventory ---");
+                            player.getInventory().displayInventory();
+                            System.out.println("-----------------");
+                            break;
+                        case 4:
+                            handleEating();
+                            break;
+                        case 5:
+                            inActionMenu = false;
+                            break;
+                        case 6:
+                            if (isSubLocation(player.getLocation())) {
+                                new VisitingAction(player, worldState, "WorldMap", npcs).execute();
+                            } else {
+                                System.out.println("Pilihan tidak valid.");
+                            }
+                            break;
+                        case 7:
+                            if (adjacentObjectOnFarm != null) {
+                                handleFarmObjectInteraction(adjacentObjectOnFarm);
+                            } else {
+                                System.out.println("Pilihan tidak valid.");
+                            }
+                            break;
+                        default:
                             System.out.println("Pilihan tidak valid.");
-                        }
-                        break;
-                    case 7:
-                        if (adjacentObjectOnFarm != null) {
-                            handleFarmObjectInteraction(adjacentObjectOnFarm);
-                        } else {
-                            System.out.println("Pilihan tidak valid.");
-                        }
-                        break;
-                    default:
-                        System.out.println("Pilihan tidak valid.");
+                    }
                 }
                 checkEndGame();
-            } catch (InputMismatchException e) {
-                System.out.println("Input tidak valid. Masukkan angka.");
-                scanner.nextLine();
+            } catch (NumberFormatException e) {
+                System.out.println("Perintah tidak dikenal. Gunakan W/A/S/D untuk bergerak atau masukkan nomor aksi.");
             }
         }
     }
@@ -328,7 +359,7 @@ public class Main {
         System.out.println("Berinteraksi dengan " + objectName + "...");
         switch (objectName) {
             case "House":
-                new VisitingAction(player, worldState, "House").execute();
+                new VisitingAction(player, worldState, "House", npcs).execute();
                 break;
             case "Pond":
                 String originalLocation = player.getLocation();
@@ -348,89 +379,103 @@ public class Main {
     // ... (method-method lain dari isSubLocation hingga checkEndGame tidak berubah) ...
     private static boolean isSubLocation(String location) {
         if (location == null || location.isEmpty()) return false;
-        if (location.equals(player.getFarmName()) || location.equals("House") || location.equals("World Map")) {
+        if (location.equals(player.getFarmName()) || location.equals("House") || location.equals("WorldMap")) {
             return false;
         }
         return true;
     }
     
-    private static void handleWorldMapInteraction() {
+    private static boolean handleWorldMapInteraction() {
         worldMap.displayMap();
-        System.out.println("\n--- Aksi Peta Dunia ---");
-        System.out.println("1. Gerak (W/A/S/D)");
-        System.out.println("2. Masuk Lokasi Terdekat");
-        System.out.println("0. Batal (Tetap di Peta Dunia)");
-        System.out.print("Pilihan: ");
-    
-        int choice;
+        System.out.println("\n--- Kontrol ---");
+        System.out.println("-> Gerak: Langsung ketik W/A/S/D lalu Enter");
+        System.out.println("\n--- Aksi Tersedia ---");
+        System.out.println("1. Masuk Lokasi Terdekat");
+        System.out.println("2. Tampilkan Lokasi Saat Ini");
+        System.out.println("3. Kembali ke Menu Utama"); 
+        System.out.println("0. Batal (gambar ulang peta)");
+        System.out.print("Pilih Aksi (angka) atau Gerak (W/A/S/D): ");
+
         try {
-            choice = scanner.nextInt();
-            scanner.nextLine();
-        } catch (InputMismatchException e) {
-            System.out.println("Input tidak valid. Masukkan angka.");
-            scanner.nextLine();
-            return;
-        }
-    
-        switch (choice) {
-            case 1:
-                System.out.print("Masukkan arah (W/A/S/D): ");
-                char direction = scanner.nextLine().trim().toLowerCase().charAt(0);
+            String input = scanner.nextLine().trim().toLowerCase();
+            if (input.isEmpty()) {
+                return true; // 
+            }
+
+            if (input.length() == 1 && "wasd".contains(input)) {
+                char direction = input.charAt(0);
                 if (worldMap.movePlayer(direction)) {
-                    player.setEnergy(player.getEnergy() - 1);
-                    worldState.getCurrentTime().advanceMinutes(5);
-                    System.out.println("Bergerak di peta... (-1 Energi, +5 Menit)");
+                    if (worldState != null && worldState.getCurrentTime() != null) {
+                        worldState.getCurrentTime().advanceMinutes(5);
+                    }
+                    System.out.println("Bergerak di peta...");
                 } else {
                     System.out.println("Tidak bisa bergerak ke arah sana.");
                 }
-                break;
-            case 2:
-                String adjacentArea = worldMap.getAdjacentSpecialArea();
-                if (adjacentArea != null) {
-                    System.out.println("Kamu berada di dekat " + adjacentArea + ". Masuk? (y/n)");
-                    if (scanner.nextLine().trim().equalsIgnoreCase("y")) {
-                        String destination = "";
-                        switch(adjacentArea) {
-                            case "FarmMap":
-                                destination = player.getFarmName();
-                                worldMap.movePlayerToFarmMap();
-                                break;
-                            case "Emily's Store":
-                                destination = "Store";
-                                break;
-                            case "Forest River":
-                            case "Mountain Lake":
-                            case "Ocean":
-                                destination = adjacentArea;
-                                break;
-                            default:
-                                if(adjacentArea.startsWith("Rumah ")) {
-                                    destination = adjacentArea.replace("Rumah ", "") + " House";
+            } else {
+                int choice = Integer.parseInt(input);
+                switch (choice) {
+                    case 1:
+                        String adjacentArea = worldMap.getAdjacentSpecialArea();
+                        if (adjacentArea != null) {
+                            System.out.println("Kamu berada di dekat " + adjacentArea + ". Masuk? (y/n)");
+                            if (scanner.nextLine().trim().equalsIgnoreCase("y")) {
+                                String destination = "";
+                                switch(adjacentArea) {
+                                    case "FarmMap":
+                                        destination = player.getFarmName();
+                                        worldMap.movePlayerToFarmMap();
+                                        break;
+                                    case "Emily's Store":
+                                        destination = "Store";
+                                        break;
+                                    case "Forest River":
+                                    case "Mountain Lake":
+                                    case "Ocean":
+                                        destination = adjacentArea;
+                                        break;
+                                    default:
+                                        if(adjacentArea.startsWith("Rumah ")) {
+                                            destination = adjacentArea.replace("Rumah ", "") + " House";
+                                        }
+                                        break;
                                 }
-                                break;
-                        }
-                        
-                        if (!destination.isEmpty()) {
-                            new VisitingAction(player, worldState, destination).execute();
+                                if (!destination.isEmpty()) {
+                                    new VisitingAction(player, worldState, destination, npcs).execute();
+                                } else {
+                                    System.out.println("Area '" + adjacentArea + "' belum bisa dikunjungi.");
+                                }
+                            }
                         } else {
-                            System.out.println("Area '" + adjacentArea + "' belum bisa dikunjungi.");
+                            System.out.println("Tidak ada lokasi khusus di dekatmu.");
                         }
-                    }
-                } else {
-                    System.out.println("Tidak ada lokasi khusus di dekatmu.");
+                        break;
+                    case 0:
+                        return true; 
+                    case 2:
+                        System.out.println("\nLokasi Saat Ini: " + player.getLocation());
+                        break;
+                    case 3:
+                        return false; 
+                    default:
+                        System.out.println("Pilihan tidak valid.");
+                        break;
                 }
-                break;
-            case 0: break;
-            default: System.out.println("Pilihan tidak valid."); break;
+            }
+        } catch (NumberFormatException e) {
+            System.out.println("Perintah tidak dikenal. Gunakan W/A/S/D atau nomor aksi yang valid.");
         }
+        return true; // Secara default, tetap di menu aksi
     }
 
     private static void handleInteraction() {
         String currentLocation = player.getLocation();
         if (currentLocation.equals(player.getFarmName())) {
-            Tile currentTile = new Tile();
+            int playerX = farmMap.getPlayerX();
+            int playerY = farmMap.getPlayerY();
+            Tile currentTile = tiles[playerY][playerX]; 
             System.out.println("Aksi di Ladang (pada tile " + farmMap.getPlayerX() + "," + farmMap.getPlayerY() + "):");
-            System.out.println("1. Cangkul Tanah | 2. Siram | 3. Tanam | 4. Panen");
+            System.out.println("1. Cangkul Tanah | 2. Siram | 3. Tanam | 4. Panen | 5. Recover Tanah");
             System.out.print("Pilihan: ");
             int farmAction = scanner.nextInt();
             scanner.nextLine();
@@ -439,6 +484,7 @@ public class Main {
                 case 2: new WateringAction(player, worldState, currentTile).execute(); break;
                 case 3: new PlantingAction(player, worldState, farmMap, currentTile).execute(); break;
                 case 4: new HarvestingAction(player, worldState, farmMap, currentTile, allItems).execute(); break;
+                case 5: new RecoverLandAction(player, worldState, farmMap, currentTile).execute(); break;
                 default: System.out.println("Aksi tidak valid.");
             }
         } else if (currentLocation.equals("House")) {
@@ -475,6 +521,8 @@ public class Main {
         System.out.println("1. Beli Item");
         System.out.println("2. Ngobrol dengan Emily");
         System.out.println("3. Beri Hadiah ke Emily");
+        System.out.println("4. Lamar (butuh Proposal Ring & 150 HP)");
+        System.out.println("5. Menikah (harus sudah tunangan)");
         System.out.print("Pilihan: ");
         int choice = scanner.nextInt();
         scanner.nextLine();
@@ -499,6 +547,15 @@ public class Main {
                 Item gift = player.getInventory().getItemByName(giftName);
                 new GiftingAction(player, worldState, emily, gift).execute();
                 break;
+            case 4:
+                Item ring = Item.findItemByName(allItems, "Proposal Ring");
+                new ProposingAction(player, worldState, emily, ring).execute();
+                break;
+            case 5:
+                Item ringForMarriage = Item.findItemByName(allItems, "Proposal Ring");
+                new MarryingAction(player, worldState, emily, ringForMarriage).execute();
+                break;
+            default: System.out.println("Pilihan tidak valid.");
         }
     }
 
