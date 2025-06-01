@@ -1,12 +1,18 @@
 # Spakbor Hills
 
 Game 'Spakbor Hills' ini dibuat oleh:
-IF2010 - Kelompok K06 G05
-18221339 - Andi Syaichul Mubaraq
-18223117 - Khairunnisa Azizah
-18223132 - Muhammad Rafly Fauzan
-18223130 - M Rabbani K A
-18223136 - Geraldo Linggom Samuel T.
+
+#### IF2010 - Kelompok K06 G05
+
+#### 18221339 - Andi Syaichul Mubaraq
+
+#### 18223117 - Khairunnisa Azizah
+
+#### 18223132 - Muhammad Rafly Fauzan
+
+#### 18223130 - M Rabbani K A
+
+#### 18223136 - Geraldo Linggom Samuel T.
 
 # Instalasi dan Penggunaan Gradle untuk Java di Windows
 
