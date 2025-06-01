@@ -2,14 +2,17 @@ package test;
 
 public class FoodTester {
     public static void main(String[] args) {
-        Food sashimi = new Food(70, new Gold(300), new Gold(275));
-
-        System.out.println("== Food Test ==");
-        System.out.println("Energy: " + sashimi.getEnergyRes());
-        System.out.println("Buy Price: " + sashimi.getFoodBuyPrice());
-        System.out.println("Sell Price: " + sashimi.getFoodSellPrice());
-
-        sashimi.setFoodBuyPrice("Sashimi", new Gold(310));
-        System.out.println("Updated Buy Price: " + sashimi.getFoodBuyPrice());
+        
+        // Food biasa
+        Food bread = new Food("Bread", 50, 25, 15);
+        System.out.println(bread);
+        
+        // Food mahal
+        Food goldenApple = new Food("Golden Apple", 500, 750, 100);
+        System.out.println(goldenApple);
+        
+        // Food gratis
+        Food berries = new Food("Wild Berries", 0, 10, 5);
+        System.out.println(berries);
     }
 }

@@ -1,30 +1,26 @@
-public class Food extends EdibleItem {
-    private Gold foodBuyPrice;
-    private Gold foodSellPrice;
+public class Food extends Item implements Edible {
+    private int energyValue;
 
-    public Food(int energyRes, Gold foodBuyPrice, Gold foodSellPrice) {
-        super(energyRes);
-        this.foodBuyPrice = foodBuyPrice;
-        this.foodSellPrice = foodSellPrice;
+    public Food(String name, int buyPrice, int sellPrice, int energyValue) {
+        super("Food", name, buyPrice, sellPrice);
+        this.energyValue = energyValue;
     }
 
+    public Food getFood() {
+        return this;
+    }
+    
+    public void setEnergyRestored(int energyValue) {
+        this.energyValue = energyValue;
+    }
+    
+    @Override
     public int getEnergyRes() {
-        return energyRestored;
+        return this.energyValue;
     }
 
-    public Gold getFoodBuyPrice() {
-        return foodBuyPrice;
-    }
-
-    public Gold getFoodSellPrice() {
-        return foodSellPrice;
-    }
-
-    public void setFoodBuyPrice(String name, Gold price) {
-        this.foodBuyPrice = price;
-    }
-
-    public void setFoodSellPrice(String name, Gold price) {
-        this.foodSellPrice = price;
+    @Override
+    public String toString() {
+        return super.toString() + ", Energy: " + energyValue;
     }
 }

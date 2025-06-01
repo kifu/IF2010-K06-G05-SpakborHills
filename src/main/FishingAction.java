@@ -29,7 +29,7 @@ public class FishingAction implements Action {
 
         // Tentukan batas dan range angka berdasarkan jenis ikan
         int maxRange, maxAttempt;
-        String fishRank = fish.GetFishRank(fish.GetFish().name()).name(); // Asumsikan name() mengembalikan nama ikan
+        String fishRank = fish.GetFishRank(fish.GetFish().name()).name(); 
         switch (fishRank.toLowerCase()) {
             case "common":
                 maxRange = 10;
@@ -115,7 +115,7 @@ public class FishingAction implements Action {
         return null;
     }
 
-    // Helper method: cek apakah nilai cocok dengan array
+    // Cek apakah nilai cocok dengan array
     private boolean match(Object val, Object[] list) {
         for (Object obj : list) {
             if (val.equals(obj)) return true;
